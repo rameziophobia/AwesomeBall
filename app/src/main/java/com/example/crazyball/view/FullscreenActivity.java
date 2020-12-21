@@ -1,22 +1,34 @@
-package com.example.crazyball;
+package com.example.crazyball.view;
 
 import android.annotation.SuppressLint;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Pair;
 import androidx.dynamicanimation.animation.DynamicAnimation;
 import androidx.dynamicanimation.animation.SpringAnimation;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Insets;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowInsets;
+import android.view.WindowMetrics;
 import android.widget.ImageView;
+
+import com.example.crazyball.R;
+import com.example.crazyball.viewmodel.MainGameViewModel;
 
 
 public class FullscreenActivity extends AppCompatActivity {
@@ -40,7 +52,8 @@ public class FullscreenActivity extends AppCompatActivity {
     private final Runnable mHideRunnable = this::hide;
 
     private SensorManager sensorManager;
-    private ImageView ball;
+    private ImageView ballImageView;
+    private MainGameViewModel gameViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +63,56 @@ public class FullscreenActivity extends AppCompatActivity {
         mContentView = findViewById(R.id.fullscreen_content);
         sensorManager = (SensorManager) getApplicationContext().getSystemService(Context.SENSOR_SERVICE);
         Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-        ball = findViewById(R.id.ball);
+        ballImageView = findViewById(R.id.ball);
+
+        gameViewModel = new ViewModelProvider(this).get(MainGameViewModel.class);
+
+        ballImageView.post(() -> {
+            gameViewModel.initBall(ballImageView.getWidth(), ballImageView.getHeight());
+        });
+
+        gameViewModel.initScreen(getScreenWidth(), getScreenHeight());
+
+        int wid = getScreenWidth();
+        int height = getScreenHeight();
+        Log.d("bounds", "are " +wid+ " " + height);
+        //todo screen size and check borders
+
+        gameViewModel.moveBall().observe(this, this::onModelBallChanged);
+
         sensorManager.registerListener(sensorListener,  sensor, SensorManager.SENSOR_DELAY_NORMAL);
-        springAnimationX = new SpringAnimation(ball, DynamicAnimation.TRANSLATION_X);
-        springAnimationY = new SpringAnimation(ball, DynamicAnimation.TRANSLATION_Y);
+        springAnimationX = new SpringAnimation(ballImageView, DynamicAnimation.TRANSLATION_X);
+        springAnimationY = new SpringAnimation(ballImageView, DynamicAnimation.TRANSLATION_Y);
     }
+
+
+    public int getScreenWidth() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowMetrics windowMetrics = getWindowManager().getCurrentWindowMetrics();
+            Insets insets = windowMetrics.getWindowInsets()
+                    .getInsetsIgnoringVisibility(WindowInsets.Type.systemBars());
+            return windowMetrics.getBounds().width() - insets.left - insets.right;
+        } else {
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            return displayMetrics.widthPixels;
+        }
+    }
+
+    public int getScreenHeight() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowMetrics windowMetrics = getWindowManager().getCurrentWindowMetrics();
+            Insets insets = windowMetrics.getWindowInsets()
+                    .getInsetsIgnoringVisibility(WindowInsets.Type.systemBars());
+            return windowMetrics.getBounds().height() - insets.top - insets.bottom;
+        } else {
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            return displayMetrics.heightPixels;
+        }
+    }
+
+
 
     private int sensorReadingNumber = 0;
     SpringAnimation springAnimationX;
@@ -62,34 +120,29 @@ public class FullscreenActivity extends AppCompatActivity {
 
     SensorEventListener sensorListener = new SensorEventListener() {
 
-        float deltaX = 0;
-        float deltaY = 0;
-
         public void onSensorChanged(SensorEvent event) {
             sensorReadingNumber++;
-            if(sensorReadingNumber % 3 == 0) {
-                // use the aggregated values of deltas to normalize the effect of false readings
-                springAnimationX
-                        .animateToFinalPosition(ball.getTranslationX() - deltaX * 100);
-                springAnimationY
-                        .animateToFinalPosition(ball.getTranslationY() + deltaY * 100);
-                deltaX = 0;
-                deltaY = 0;
-            }
             if(sensorReadingNumber % 10 == 0) {
                 Log.d("sensor","========= ACCELEROMETER SENSOR X value = "+ event.values[0] + "\n");
                 Log.d("sensor","========= ACCELEROMETER SENSOR Y value = "+ event.values[1] + "\n");
                 Log.d("sensor","========= ACCELEROMETER SENSOR Z value = "+ event.values[2] + "\n");
                 Log.d("sensor","========= _____________________________________\n");
-            } else {
-                deltaX += event.values[0];
-                deltaY += event.values[1];
             }
+
+            gameViewModel.sensorsMoved(event.values[0], event.values[1], ballImageView.getX(), ballImageView.getY());
         }
+
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
         }
     };
+
+    private void animateBall(Pair<Float, Float> XYPair) {
+        springAnimationX
+                .animateToFinalPosition(ballImageView.getTranslationX() - XYPair.first);
+        springAnimationY
+                .animateToFinalPosition(ballImageView.getTranslationY() + XYPair.second);
+    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -106,14 +159,14 @@ public class FullscreenActivity extends AppCompatActivity {
         }
         mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
     }
+    
 
-
-    /**
-     * Schedules a call to hide() in delay milliseconds, canceling any
-     * previously scheduled calls.
-     */
     private void delayedHide(int delayMillis) {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
+    }
+
+    private void onModelBallChanged(Pair<Float, Float> XYPair) {
+        animateBall(XYPair);
     }
 }

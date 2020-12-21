@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="?attr/fullscreenBackgroundColor"
     android:theme="@style/ThemeOverlay.CrazyBall.FullscreenContainer"
-    tools:context=".FullscreenActivity">
+    tools:context=".view.FullscreenActivity">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
@@ -19,11 +19,20 @@
             android:id="@+id/ball"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginStart="184dp"
-            android:layout_marginTop="92dp"
+            android:translationX="184dp"
+            android:translationY="94dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ball01" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="250dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_wall_hor" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
