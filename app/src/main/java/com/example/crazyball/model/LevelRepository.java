@@ -1,6 +1,7 @@
 package com.example.crazyball.model;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -27,9 +28,9 @@ public class LevelRepository {
     }
 
     public LiveData<List<LevelWithComponents>> getAllLevels() {
+        Log.d("repo", "levels retreived");
         return allLevels;
     }
-
 
 
 }

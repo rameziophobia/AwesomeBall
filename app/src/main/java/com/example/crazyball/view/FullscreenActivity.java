@@ -11,6 +11,7 @@ import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.graphics.Insets;
 import android.hardware.Sensor;
@@ -65,7 +66,9 @@ public class FullscreenActivity extends AppCompatActivity {
         Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         ballImageView = findViewById(R.id.ball);
 
-        gameViewModel = new ViewModelProvider(this).get(MainGameViewModel.class);
+        gameViewModel = new ViewModelProvider
+                .AndroidViewModelFactory(getApplication())
+                .create(MainGameViewModel.class);
 
         ballImageView.post(() -> {
             gameViewModel.initBall(ballImageView.getWidth(), ballImageView.getHeight());

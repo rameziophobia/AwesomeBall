@@ -1,22 +1,31 @@
 package com.example.crazyball.viewmodel;
 
-import androidx.core.util.Pair;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import android.app.Application;
 
-import com.example.crazyball.R;
+import androidx.core.util.Pair;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.crazyball.model.Ball;
-import com.example.crazyball.model.tables.entities.LevelComponentEntity;
+import com.example.crazyball.model.LevelRepository;
 import com.example.crazyball.model.obstacles.Obstacle;
+import com.example.crazyball.model.tables.relations.LevelWithComponents;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class MainGameViewModel extends ViewModel {
+public class MainGameViewModel extends AndroidViewModel {
 
+    private final LevelRepository levelRepository;
+    private final LiveData<List<LevelWithComponents>> allLevels;
     private Ball ball;
     private ArrayList<Obstacle> obstacles = new ArrayList<>();
 
-    public MainGameViewModel() {
+    public MainGameViewModel(Application application) {
+        super(application);
+        levelRepository = new LevelRepository(application);
+        allLevels = levelRepository.getAllLevels();
         ball = new Ball();
     }
 
@@ -30,8 +39,11 @@ public class MainGameViewModel extends ViewModel {
 
     public ArrayList<Obstacle> loadLevel(int levelId){
         // todo use dao to get level with components from repository
-
         return obstacles;
+    }
+
+    public LiveData<List<LevelWithComponents>> getAllLevels() {
+        return allLevels;
     }
 
     public void initScreen(int screenWidth, int screenHeight) {
