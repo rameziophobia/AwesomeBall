@@ -1,20 +1,20 @@
 package com.example.crazyball.viewmodel;
 
-import android.app.Application;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.crazyball.R;
 import com.example.crazyball.model.Ball;
+import com.example.crazyball.model.tables.entities.LevelComponentEntity;
+import com.example.crazyball.model.obstacles.Obstacle;
+
+import java.util.ArrayList;
 
 public class MainGameViewModel extends ViewModel {
 
     private Ball ball;
+    private ArrayList<Obstacle> obstacles = new ArrayList<>();
 
     public MainGameViewModel() {
         ball = new Ball();
@@ -28,6 +28,12 @@ public class MainGameViewModel extends ViewModel {
         return ball.deltaXY;
     }
 
+    public ArrayList<Obstacle> loadLevel(int levelId){
+        // todo use dao to get level with components from repository
+
+        return obstacles;
+    }
+
     public void initScreen(int screenWidth, int screenHeight) {
         ball.initScreen(screenWidth, screenHeight);
     }
@@ -35,4 +41,9 @@ public class MainGameViewModel extends ViewModel {
     public void initBall(int width, float height) {
         ball.initBallDims(width, height);
     }
+
+    private ArrayList<Obstacle> getLevelObstacles() {
+        return obstacles;
+    }
+
 }

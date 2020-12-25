@@ -1,0 +1,35 @@
+package com.example.crazyball.model;
+
+import android.app.Application;
+
+import androidx.lifecycle.LiveData;
+
+import com.example.crazyball.model.tables.LevelComponentDao;
+import com.example.crazyball.model.tables.LevelDao;
+import com.example.crazyball.model.tables.LevelRoomDatabase;
+import com.example.crazyball.model.tables.relations.LevelWithComponents;
+
+import java.util.List;
+
+public class LevelRepository {
+
+    private final LevelDao levelDao;
+    private final LiveData<List<LevelWithComponents>> allLevels;
+    public LevelComponentDao componentDao;
+//    private LiveData<List>
+
+    public LevelRepository(Application application) {
+        LevelRoomDatabase db = LevelRoomDatabase.getInstance(application);
+        levelDao = db.levelDao();
+        componentDao = db.levelComponentDao();
+
+        allLevels = levelDao.getLevelsWithComponents();
+    }
+
+    public LiveData<List<LevelWithComponents>> getAllLevels() {
+        return allLevels;
+    }
+
+
+
+}
