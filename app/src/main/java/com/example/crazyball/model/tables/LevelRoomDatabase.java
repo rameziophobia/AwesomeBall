@@ -59,21 +59,22 @@ public abstract class LevelRoomDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(Void... voids) {
             LevelEntity level = new LevelEntity("first level");
-            levelDao.insert(level);
+            long insertedId = levelDao.insert(level);
 
             // todo factory method for components
             // todo use builder inside those?
+            // todo retrofit get data
 
             LevelComponentEntity component = new LevelComponentEntity(
-                    "wall", 30, 30, R.drawable.ic_wall_hor, level.getId());
+                    "wall", 30, 30, R.drawable.ic_wall_hor, insertedId);
             levelComponentDao.insert(component);
 
             component = new LevelComponentEntity(
-                    "wall", 30, 230, R.drawable.ic_wall_vert, level.getId());
+                    "wall", 30, 230, R.drawable.ic_wall_vert, insertedId);
             levelComponentDao.insert(component);
 
             component = new LevelComponentEntity(
-                    "wall", 45, 330, R.drawable.ic_wall_hor, level.getId());
+                    "wall", 45, 330, R.drawable.ic_wall_hor, insertedId);
             levelComponentDao.insert(component);
 
             return null;

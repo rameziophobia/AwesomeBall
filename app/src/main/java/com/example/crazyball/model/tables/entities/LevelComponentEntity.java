@@ -14,7 +14,7 @@ public class LevelComponentEntity {
 
     @NonNull
     @ColumnInfo(name = "level_id")
-    private final Integer levelId;
+    private final long levelId;
 
     @NonNull
     @ColumnInfo(name = "type")
@@ -33,7 +33,7 @@ public class LevelComponentEntity {
 
     private final int imageId;
 
-    public LevelComponentEntity(@NonNull String type, int locationX, int locationY, int imageId, int levelId) {
+    public LevelComponentEntity(@NonNull String type, int locationX, int locationY, int imageId, long levelId) {
         this.type = type;
         this.locationX = locationX;
         this.locationY = locationY;
@@ -69,7 +69,7 @@ public class LevelComponentEntity {
     }
 
     @NonNull
-    public Integer getLevelId() {
+    public long getLevelId() {
         return levelId;
     }
 }
