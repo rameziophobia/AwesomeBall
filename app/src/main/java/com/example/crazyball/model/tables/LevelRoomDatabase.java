@@ -15,7 +15,7 @@ import com.example.crazyball.model.tables.entities.LevelComponentEntity;
 import com.example.crazyball.model.tables.entities.LevelEntity;
 import com.example.crazyball.model.tables.relations.LevelWithComponents;
 
-@Database(entities = {LevelComponentEntity.class, LevelEntity.class}, version = 1, exportSchema = false)
+@Database(entities = {LevelComponentEntity.class, LevelEntity.class}, version = 3, exportSchema = false)
 public abstract class LevelRoomDatabase extends RoomDatabase {
     public abstract LevelDao levelDao();
     public abstract LevelComponentDao levelComponentDao();
@@ -58,11 +58,13 @@ public abstract class LevelRoomDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            LevelEntity level = new LevelEntity("first level");
+            levelDao.deleteAllLevels();
+            LevelEntity level = new LevelEntity("5th level");
+            level.setDifficultyLevel("Hard");
             long insertedId = levelDao.insert(level);
 
             // todo factory method for components
-            // todo use builder inside those?
+            // todo use builder pattern
             // todo retrofit get data
 
             LevelComponentEntity component = new LevelComponentEntity(
@@ -71,6 +73,22 @@ public abstract class LevelRoomDatabase extends RoomDatabase {
 
             component = new LevelComponentEntity(
                     "wall", 30, 230, R.drawable.ic_wall_vert, insertedId);
+            levelComponentDao.insert(component);
+
+            component = new LevelComponentEntity(
+                    "wall", 45, 330, R.drawable.ic_wall_hor, insertedId);
+            levelComponentDao.insert(component);
+
+            level = new LevelEntity("6th level");
+            level.setDifficultyLevel("Medium");
+            insertedId = levelDao.insert(level);
+
+            // todo factory method for components
+            // todo use builder pattern
+            // todo retrofit get data
+
+            component = new LevelComponentEntity(
+                    "wall", 30, 30, R.drawable.ic_wall_hor, insertedId);
             levelComponentDao.insert(component);
 
             component = new LevelComponentEntity(

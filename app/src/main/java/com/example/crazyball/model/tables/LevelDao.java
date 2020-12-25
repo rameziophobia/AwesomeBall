@@ -30,4 +30,7 @@ public interface LevelDao {
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public long insert(LevelEntity level);
+
+    @Query("DELETE FROM level;")
+    void deleteAllLevels();
 }

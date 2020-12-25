@@ -36,10 +36,10 @@ public class LevelListAdapter extends RecyclerView.Adapter<LevelListAdapter.Leve
         if (levels != null) {
             LevelWithComponents currentLevel = levels.get(position);
             holder.levelItemTextView.setText(currentLevel.Level.getName());
-            holder.numObstaclesTextView.setText(String.valueOf(currentLevel.components.size()));
+            holder.numObstaclesTextView.setText(currentLevel.Level.getDifficultyLevel());
         } else {
             holder.levelItemTextView.setText(R.string.dummy_level_name);
-            holder.numObstaclesTextView.setText(R.string.dummy_num_components);
+            holder.numObstaclesTextView.setText(R.string.level_difficulty_placeholder);
         }
     }
 

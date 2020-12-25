@@ -10,14 +10,8 @@
         style="@style/level_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:textColor="@color/design_default_color_on_secondary" />
-
-    <TextView
-        style="@style/level_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/num_obstacles"
+        android:layout_weight="8"
+        android:padding="6dp"
         android:textColor="@color/design_default_color_on_secondary" />
 
     <TextView
@@ -25,7 +19,8 @@
         style="@style/level_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="@string/num_obstacles_placeholder"
+        android:layout_weight="5"
+        android:padding="6dp"
+        android:text="@string/level_difficulty_placeholder"
         android:textColor="@color/design_default_color_on_secondary" />
 </LinearLayout>

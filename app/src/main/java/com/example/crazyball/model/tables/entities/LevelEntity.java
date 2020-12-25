@@ -16,6 +16,9 @@ public class LevelEntity {
     @ColumnInfo(name = "name")
     private String name;
 
+    @ColumnInfo(name = "difficulty_level")
+    private String difficultyLevel  = "Easy";
+
     public int getId() {
         return id;
     }
@@ -31,6 +34,14 @@ public class LevelEntity {
     @NonNull
     public String getName() {
         return name;
+    }
+
+    public String getDifficultyLevel() {
+        return difficultyLevel;
+    }
+
+    public void setDifficultyLevel(String difficultyLevel) {
+        this.difficultyLevel = difficultyLevel;
     }
 
     // todo add foreign key for obstacles

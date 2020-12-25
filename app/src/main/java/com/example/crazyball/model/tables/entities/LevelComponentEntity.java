@@ -3,9 +3,15 @@ package com.example.crazyball.model.tables.entities;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ColumnInfo;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "level_component")
+@Entity(tableName = "level_component",
+        foreignKeys = @ForeignKey(entity = LevelEntity.class,
+        parentColumns = "id",
+        childColumns = "level_id",
+        onDelete = ForeignKey.CASCADE))
+
 public class LevelComponentEntity {
     @PrimaryKey(autoGenerate = true)
     @NonNull

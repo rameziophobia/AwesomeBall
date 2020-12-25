@@ -9,7 +9,6 @@
     -->
     <string name="hello_world">Hello Square World!</string>
     <string name="num_obstacles">#obstacles</string>
-    <string name="num_obstacles_placeholder">000</string>
+    <string name="level_difficulty_placeholder">Easy</string>
     <string name="dummy_level_name">dummy name</string>
-    <string name="dummy_num_components">00</string>
 </resources>
