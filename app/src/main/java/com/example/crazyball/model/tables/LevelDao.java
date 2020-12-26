@@ -27,6 +27,11 @@ public interface LevelDao {
     @Query("SELECT * FROM level where id=:id")
     public LiveData<List<LevelWithComponents>> getLevelWithComponents(int id);
 
+//    @Transaction
+//    @Query("SELECT * FROM level where id=:id")
+//    public List<LevelWithComponents> getLevelWithComponentsSynchronous(int id);
+
+
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public long insert(LevelEntity level);

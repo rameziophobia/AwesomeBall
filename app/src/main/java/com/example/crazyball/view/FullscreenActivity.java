@@ -6,9 +6,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.util.Pair;
 import androidx.dynamicanimation.animation.DynamicAnimation;
 import androidx.dynamicanimation.animation.SpringAnimation;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
@@ -30,7 +34,12 @@ import android.view.WindowMetrics;
 import android.widget.ImageView;
 
 import com.example.crazyball.R;
+import com.example.crazyball.model.obstacles.Obstacle;
+import com.example.crazyball.model.tables.relations.LevelWithComponents;
 import com.example.crazyball.viewmodel.MainGameViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class FullscreenActivity extends AppCompatActivity {
@@ -48,30 +57,23 @@ public class FullscreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_fullscreen);
         mContentView = findViewById(R.id.fullscreen_content);
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.hide();
-        }
+        gameViewModel = new ViewModelProvider
+                .AndroidViewModelFactory(getApplication())
+                .create(MainGameViewModel.class);
+
+        gameViewModel.initScreen(getScreenWidth(), getScreenHeight());
+        loadLevelImages();
 
         sensorManager = (SensorManager) getApplicationContext().getSystemService(Context.SENSOR_SERVICE);
         Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         ballImageView = findViewById(R.id.ball);
 
-        gameViewModel = new ViewModelProvider
-                .AndroidViewModelFactory(getApplication())
-                .create(MainGameViewModel.class);
 
         ballImageView.post(() -> {
             gameViewModel.initBall(ballImageView.getWidth(), ballImageView.getHeight());
         });
 
 
-        gameViewModel.initScreen(getScreenWidth(), getScreenHeight());
-
-        int wid = getScreenWidth();
-        int height = getScreenHeight();
-        Log.d("bounds", "are " +wid+ " " + height);
-        //todo screen size and check borders
 
         gameViewModel.moveBall().observe(this, this::onModelBallChanged);
 
@@ -80,15 +82,73 @@ public class FullscreenActivity extends AppCompatActivity {
         springAnimationY = new SpringAnimation(ballImageView, DynamicAnimation.TRANSLATION_Y);
     }
 
+    private void loadLevelImages() {
+        gameViewModel.getAllLevels().observe(this, new Observer<List<LevelWithComponents>>() {
+                    @Override
+                    public void onChanged(List<LevelWithComponents> levelWithComponents) {
+                        final int id = levelWithComponents.get(0).Level.getId();
+                        gameViewModel.getAllLevels().removeObserver(this);
+                        final LiveData<ArrayList<Obstacle>> arrayListLiveData = gameViewModel.loadLevel(id);
+                        arrayListLiveData.observeForever(new Observer<ArrayList<Obstacle>>() {
+                            @Override
+                            public void onChanged(ArrayList<Obstacle> obstacles) {
+                                {
+                                    arrayListLiveData.removeObserver(this);
+//            mContentView.post(() -> {
+                                    ConstraintLayout layout = findViewById(R.id.constraint_view);
+                                    ConstraintSet set = new ConstraintSet();
+                                    for (Obstacle obstacle : obstacles) {
+                                        ImageView imageView = new ImageView(getApplicationContext());
+                                        imageView.setImageResource(obstacle.getComponentData().getImageId());
+                                        imageView.setId(obstacle.getComponentData().getId());
+                                        layout.addView(imageView, 0);
+
+                                        set.clone(layout);
+                                        set.connect(imageView.getId(), ConstraintSet.TOP,
+                                                layout.getId(), ConstraintSet.TOP,
+                                                obstacle.getStartX());
+
+                                        set.connect(imageView.getId(), ConstraintSet.LEFT,
+                                                layout.getId(), ConstraintSet.LEFT,
+                                                obstacle.getStartY());
+
+                                        set.applyTo(layout);
+                                    }
+
+//            });
+                                }
+                            }
+                        });
+                    }
+                });
+
+
+    }
+
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        hideSystemUI();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        hideSystemUI();
+    }
+
+    private void hideSystemUI() {
         mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
     }
 
     public int getScreenWidth() {

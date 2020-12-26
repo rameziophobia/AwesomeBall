@@ -8,6 +8,11 @@ public class Wall extends Obstacle {
         super(componentData, tileWidth, tileHeight);
     }
 
+    @Override
+    public boolean checkCollision() {
+        return false;
+    }
+
     public static Obstacle createWall(LevelComponentEntity componentData, int tileWidth, int tileHeight) {
         Obstacle ob = new Wall(componentData, tileWidth, tileHeight);
 

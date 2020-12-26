@@ -7,6 +7,11 @@ public class Trap extends Obstacle {
         super(componentData, tileWidth, tileHeight);
     }
 
+    @Override
+    public boolean checkCollision() {
+        return false;
+    }
+
     public static Obstacle createTrap(LevelComponentEntity componentData, int tileWidth, int tileHeight) {
         Obstacle ob = new Wall(componentData, tileWidth, tileHeight);
 

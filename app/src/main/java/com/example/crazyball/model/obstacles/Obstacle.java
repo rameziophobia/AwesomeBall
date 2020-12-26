@@ -27,12 +27,29 @@ public abstract class Obstacle {
             case "trap":
                 ob = Trap.createTrap(componentData, tileWidth, tileHeight);
                 break;
+            case "key":
+                ob = KeyTile.createKeyTile(componentData, tileWidth, tileHeight);
+                break;
+            case "door":
+                ob = Door.createDoor(componentData, tileWidth, tileHeight);
+                break;
             default:
                 throw new IllegalStateException("Unexpected value in obstacle creation: " + componentData.getType());
         }
         return ob;
     }
 
+    public abstract boolean checkCollision();
 
+    public LevelComponentEntity getComponentData() {
+        return componentData;
+    }
 
+    public int getStartX() {
+        return startX;
+    }
+
+    public int getStartY() {
+        return startY;
+    }
 }

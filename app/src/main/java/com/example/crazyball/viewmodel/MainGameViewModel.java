@@ -21,7 +21,7 @@ public class MainGameViewModel extends AndroidViewModel {
     private final LevelRepository levelRepository;
     private final LiveData<List<LevelWithComponents>> allLevels;
     private Ball ball;
-    private ArrayList<Obstacle> obstacles = new ArrayList<>();
+    private LiveData<ArrayList<Obstacle>> obstacles;
 
     public MainGameViewModel(Application application) {
         super(application);
@@ -38,7 +38,7 @@ public class MainGameViewModel extends AndroidViewModel {
         return ball.deltaXY;
     }
 
-    public ArrayList<Obstacle> loadLevel(int levelId){
+    public LiveData<ArrayList<Obstacle>> loadLevel(int levelId){
         this.obstacles = levelRepository.loadLevel(levelId);
         return obstacles;
     }
@@ -56,7 +56,7 @@ public class MainGameViewModel extends AndroidViewModel {
         ball.initBallDims(width, height);
     }
 
-    private ArrayList<Obstacle> getLevelObstacles() {
+    private LiveData<ArrayList<Obstacle>> getLevelObstacles() {
         return obstacles;
     }
 

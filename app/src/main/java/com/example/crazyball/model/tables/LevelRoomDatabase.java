@@ -39,8 +39,8 @@ public abstract class LevelRoomDatabase extends RoomDatabase {
 
     public static RoomDatabase.Callback databaseCreatedCallback = new RoomDatabase.Callback(){
         @Override
-        public void onOpen(@NonNull SupportSQLiteDatabase db) {
-            super.onOpen(db);
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
             new PopulateDbAsync(INSTANCE).execute();
         }
     };

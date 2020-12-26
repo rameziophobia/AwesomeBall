@@ -7,6 +7,11 @@ public class KeyTile extends Obstacle {
         super(componentData, tileWidth, tileHeight);
     }
 
+    @Override
+    public boolean checkCollision() {
+        return false;
+    }
+
     public static Obstacle createKeyTile(LevelComponentEntity componentData, int tileWidth, int tileHeight) {
         Obstacle ob = new Wall(componentData, tileWidth, tileHeight);
 
