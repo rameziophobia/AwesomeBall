@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.crazyball.model.Ball;
+import com.example.crazyball.model.LevelLoader;
 import com.example.crazyball.model.LevelRepository;
 import com.example.crazyball.model.obstacles.Obstacle;
 import com.example.crazyball.model.tables.relations.LevelWithComponents;
@@ -38,7 +39,7 @@ public class MainGameViewModel extends AndroidViewModel {
     }
 
     public ArrayList<Obstacle> loadLevel(int levelId){
-        // todo use dao to get level with components from repository
+        this.obstacles = levelRepository.loadLevel(levelId);
         return obstacles;
     }
 
@@ -48,6 +49,7 @@ public class MainGameViewModel extends AndroidViewModel {
 
     public void initScreen(int screenWidth, int screenHeight) {
         ball.initScreen(screenWidth, screenHeight);
+        LevelLoader.getInstance().initScreen(screenWidth, screenHeight);
     }
 
     public void initBall(int width, float height) {

@@ -5,11 +5,13 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.crazyball.model.obstacles.Obstacle;
 import com.example.crazyball.model.tables.LevelComponentDao;
 import com.example.crazyball.model.tables.LevelDao;
 import com.example.crazyball.model.tables.LevelRoomDatabase;
 import com.example.crazyball.model.tables.relations.LevelWithComponents;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LevelRepository {
@@ -33,4 +35,9 @@ public class LevelRepository {
     }
 
 
+    public ArrayList<Obstacle> loadLevel(int levelId) {
+        LevelWithComponents level = levelDao.getLevelWithComponents(levelId).getValue().get(0);
+
+        return LevelLoader.getInstance().loadLevel(level);
+    }
 }

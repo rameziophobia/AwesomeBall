@@ -3,12 +3,9 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_level_selector">LevelSelector</string>
-    <!--
-    This string is used for square devices and overridden by hello_world in
-    values-round/strings.xml for round devices.
-    -->
     <string name="hello_world">Hello Square World!</string>
     <string name="num_obstacles">#obstacles</string>
     <string name="level_difficulty_placeholder">Easy</string>
     <string name="dummy_level_name">dummy name</string>
+    <string name="obstacle_wall">wall</string>
 </resources>

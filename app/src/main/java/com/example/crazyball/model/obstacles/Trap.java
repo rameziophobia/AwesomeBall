@@ -2,15 +2,15 @@ package com.example.crazyball.model.obstacles;
 
 import com.example.crazyball.model.tables.entities.LevelComponentEntity;
 
-public class Wall extends Obstacle {
-
-    public Wall(LevelComponentEntity componentData, int tileWidth, int tileHeight) {
+public class Trap extends Obstacle {
+    protected Trap(LevelComponentEntity componentData, int tileWidth, int tileHeight) {
         super(componentData, tileWidth, tileHeight);
     }
 
-    public static Obstacle createWall(LevelComponentEntity componentData, int tileWidth, int tileHeight) {
+    public static Obstacle createTrap(LevelComponentEntity componentData, int tileWidth, int tileHeight) {
         Obstacle ob = new Wall(componentData, tileWidth, tileHeight);
 
         return ob;
     }
+
 }

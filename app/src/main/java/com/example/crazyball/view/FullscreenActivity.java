@@ -65,6 +65,7 @@ public class FullscreenActivity extends AppCompatActivity {
             gameViewModel.initBall(ballImageView.getWidth(), ballImageView.getHeight());
         });
 
+
         gameViewModel.initScreen(getScreenWidth(), getScreenHeight());
 
         int wid = getScreenWidth();
