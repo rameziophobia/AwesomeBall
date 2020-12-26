@@ -49,7 +49,7 @@ public class FullscreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_fullscreen);
-        mContentView = findViewById(R.id.fullscreen_content);
+        mContentView = findViewById(R.id.constraint_view);
 
         gameViewModel = new ViewModelProvider
                 .AndroidViewModelFactory(getApplication())
