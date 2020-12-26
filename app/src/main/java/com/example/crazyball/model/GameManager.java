@@ -1,12 +1,12 @@
 package com.example.crazyball.model;
 
-import com.example.crazyball.model.obstacles.Obstacle;
+import com.example.crazyball.model.obstacles.ComponentModel;
 
 import java.util.ArrayList;
 
 public class GameManager {
 
-    ArrayList<Obstacle> obstacles = new ArrayList<>();
+    ArrayList<ComponentModel> componentModels = new ArrayList<>();
 
 
 

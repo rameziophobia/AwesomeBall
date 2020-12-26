@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import com.example.crazyball.model.obstacles.Obstacle;
+import com.example.crazyball.model.obstacles.ComponentModel;
 import com.example.crazyball.model.tables.entities.LevelComponentEntity;
 import com.example.crazyball.model.tables.relations.LevelWithComponents;
 
@@ -42,22 +42,22 @@ public class LevelLoader {
     }
 
 
-    public LiveData<ArrayList<Obstacle>> loadLevel(LiveData<List<LevelWithComponents>>  level) {
-        MutableLiveData<ArrayList<Obstacle>> obstacles = new MutableLiveData<>();
+    public LiveData<ArrayList<ComponentModel>> loadLevel(LiveData<List<LevelWithComponents>>  level) {
+        MutableLiveData<ArrayList<ComponentModel>> components = new MutableLiveData<>();
         level.observeForever(new Observer<List<LevelWithComponents>>() {
             @Override
             public void onChanged(List<LevelWithComponents> levelWithComponents) {
                 level.removeObserver(this);
-                ArrayList<Obstacle> obstaclesList = new ArrayList<>();
-                for (LevelComponentEntity component : levelWithComponents.get(0).components) {
-                    Obstacle ob = Obstacle.createObstacle(component, tileWidth, tileHeight);
-                    obstaclesList.add(ob);
+                ArrayList<ComponentModel> obstaclesList = new ArrayList<>();
+                for (LevelComponentEntity componentEntity : levelWithComponents.get(0).components) {
+                    ComponentModel component = ComponentModel.createComponent(componentEntity, tileWidth, tileHeight);
+                    obstaclesList.add(component);
                 }
-                obstacles.postValue(obstaclesList);
+                components.postValue(obstaclesList);
             }
         });
 
-        return obstacles;
+        return components;
     }
 
 }

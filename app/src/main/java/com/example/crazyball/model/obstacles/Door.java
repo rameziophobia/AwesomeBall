@@ -2,7 +2,7 @@ package com.example.crazyball.model.obstacles;
 
 import com.example.crazyball.model.tables.entities.LevelComponentEntity;
 
-public class Door extends Obstacle {
+public class Door extends ComponentModel {
     protected Door(LevelComponentEntity componentData, int tileWidth, int tileHeight) {
         super(componentData, tileWidth, tileHeight);
     }
@@ -12,10 +12,10 @@ public class Door extends Obstacle {
         return false;
     }
 
-    public static Obstacle createDoor(LevelComponentEntity componentData, int tileWidth, int tileHeight) {
-        Obstacle ob = new Wall(componentData, tileWidth, tileHeight);
+    public static ComponentModel createDoor(LevelComponentEntity componentData, int tileWidth, int tileHeight) {
+        ComponentModel component = new Wall(componentData, tileWidth, tileHeight);
 
-        return ob;
+        return component;
     }
 
 }

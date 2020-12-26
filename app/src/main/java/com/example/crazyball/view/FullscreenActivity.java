@@ -1,8 +1,5 @@
 package com.example.crazyball.view;
 
-import android.annotation.SuppressLint;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,8 +12,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.graphics.Insets;
 import android.hardware.Sensor;
@@ -25,7 +20,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -34,7 +28,7 @@ import android.view.WindowMetrics;
 import android.widget.ImageView;
 
 import com.example.crazyball.R;
-import com.example.crazyball.model.obstacles.Obstacle;
+import com.example.crazyball.model.obstacles.ComponentModel;
 import com.example.crazyball.model.tables.relations.LevelWithComponents;
 import com.example.crazyball.viewmodel.MainGameViewModel;
 
@@ -84,45 +78,40 @@ public class FullscreenActivity extends AppCompatActivity {
 
     private void loadLevelImages() {
         gameViewModel.getAllLevels().observe(this, new Observer<List<LevelWithComponents>>() {
+            @Override
+            public void onChanged(List<LevelWithComponents> levelWithComponents) {
+                final int id = levelWithComponents.get(0).Level.getId();
+                gameViewModel.getAllLevels().removeObserver(this);
+                final LiveData<ArrayList<ComponentModel>> arrayListLiveData = gameViewModel.loadLevel(id);
+                arrayListLiveData.observeForever(new Observer<ArrayList<ComponentModel>>() {
                     @Override
-                    public void onChanged(List<LevelWithComponents> levelWithComponents) {
-                        final int id = levelWithComponents.get(0).Level.getId();
-                        gameViewModel.getAllLevels().removeObserver(this);
-                        final LiveData<ArrayList<Obstacle>> arrayListLiveData = gameViewModel.loadLevel(id);
-                        arrayListLiveData.observeForever(new Observer<ArrayList<Obstacle>>() {
-                            @Override
-                            public void onChanged(ArrayList<Obstacle> obstacles) {
-                                {
-                                    arrayListLiveData.removeObserver(this);
-//            mContentView.post(() -> {
-                                    ConstraintLayout layout = findViewById(R.id.constraint_view);
-                                    ConstraintSet set = new ConstraintSet();
-                                    for (Obstacle obstacle : obstacles) {
-                                        ImageView imageView = new ImageView(getApplicationContext());
-                                        imageView.setImageResource(obstacle.getComponentData().getImageId());
-                                        imageView.setId(obstacle.getComponentData().getId());
-                                        layout.addView(imageView, 0);
+                    public void onChanged(ArrayList<ComponentModel> componentModels) {
+                        {
+                            arrayListLiveData.removeObserver(this);
+                            ConstraintLayout layout = findViewById(R.id.constraint_view);
+                            ConstraintSet set = new ConstraintSet();
+                            for (ComponentModel componentModel : componentModels) {
+                                ImageView imageView = new ImageView(getApplicationContext());
+                                imageView.setImageResource(componentModel.getComponentData().getImageId());
+                                imageView.setId(componentModel.getComponentData().getId());
+                                layout.addView(imageView, 0);
 
-                                        set.clone(layout);
-                                        set.connect(imageView.getId(), ConstraintSet.TOP,
-                                                layout.getId(), ConstraintSet.TOP,
-                                                obstacle.getStartX());
+                                set.clone(layout);
+                                set.connect(imageView.getId(), ConstraintSet.TOP,
+                                        layout.getId(), ConstraintSet.TOP,
+                                        componentModel.getStartY());
 
-                                        set.connect(imageView.getId(), ConstraintSet.LEFT,
-                                                layout.getId(), ConstraintSet.LEFT,
-                                                obstacle.getStartY());
+                                set.connect(imageView.getId(), ConstraintSet.LEFT,
+                                        layout.getId(), ConstraintSet.LEFT,
+                                        componentModel.getStartX());
 
-                                        set.applyTo(layout);
-                                    }
-
-//            });
-                                }
+                                set.applyTo(layout);
                             }
-                        });
+                        }
                     }
                 });
-
-
+            }
+        });
     }
 
     @Override

@@ -10,7 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.crazyball.model.Ball;
 import com.example.crazyball.model.LevelLoader;
 import com.example.crazyball.model.LevelRepository;
-import com.example.crazyball.model.obstacles.Obstacle;
+import com.example.crazyball.model.obstacles.ComponentModel;
 import com.example.crazyball.model.tables.relations.LevelWithComponents;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class MainGameViewModel extends AndroidViewModel {
     private final LevelRepository levelRepository;
     private final LiveData<List<LevelWithComponents>> allLevels;
     private Ball ball;
-    private LiveData<ArrayList<Obstacle>> obstacles;
+    private LiveData<ArrayList<ComponentModel>> obstacles;
 
     public MainGameViewModel(Application application) {
         super(application);
@@ -38,7 +38,7 @@ public class MainGameViewModel extends AndroidViewModel {
         return ball.deltaXY;
     }
 
-    public LiveData<ArrayList<Obstacle>> loadLevel(int levelId){
+    public LiveData<ArrayList<ComponentModel>> loadLevel(int levelId){
         this.obstacles = levelRepository.loadLevel(levelId);
         return obstacles;
     }
@@ -56,7 +56,7 @@ public class MainGameViewModel extends AndroidViewModel {
         ball.initBallDims(width, height);
     }
 
-    private LiveData<ArrayList<Obstacle>> getLevelObstacles() {
+    private LiveData<ArrayList<ComponentModel>> getLevelObstacles() {
         return obstacles;
     }
 
