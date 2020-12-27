@@ -59,7 +59,7 @@ public abstract class LevelRoomDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(Void... voids) {
             levelDao.deleteAllLevels();
-            LevelEntity level = new LevelEntity("5th level");
+            LevelEntity level = new LevelEntity("1st level");
             level.setDifficultyLevel("Hard");
             long insertedId = levelDao.insert(level);
 
@@ -79,13 +79,19 @@ public abstract class LevelRoomDatabase extends RoomDatabase {
                     "wall", 0, 24, R.drawable.ic_wall_hor, insertedId);
             levelComponentDao.insert(component);
 
-            level = new LevelEntity("6th level");
+            for(int i = 0; i < 5; i++){
+                component = new LevelComponentEntity(
+                        "trap", 0, 14 + 2 * i, R.drawable.ic_red_2x2_trap, insertedId);
+                levelComponentDao.insert(component);
+            }
+
+            component = new LevelComponentEntity(
+                    "key", 6, 30, R.drawable.ic_yellow_2x2_check, insertedId);
+            levelComponentDao.insert(component);
+
+            level = new LevelEntity("2nd level");
             level.setDifficultyLevel("Medium");
             insertedId = levelDao.insert(level);
-
-            // todo factory method for components
-            // todo use builder pattern
-            // todo retrofit get data
 
             component = new LevelComponentEntity(
                     "wall", 30, 30, R.drawable.ic_wall_hor, insertedId);

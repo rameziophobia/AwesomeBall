@@ -15,7 +15,7 @@ public class Target extends ComponentModel {
     }
 
     public static ComponentModel createTarget(LevelComponentEntity componentData, int tileWidth, int tileHeight) {
-        ComponentModel component = new Wall(componentData, tileWidth, tileHeight);
+        ComponentModel component = new Target(componentData, tileWidth, tileHeight);
 
         return component;
     }

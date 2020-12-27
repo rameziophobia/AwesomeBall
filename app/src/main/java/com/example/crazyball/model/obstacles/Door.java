@@ -15,7 +15,7 @@ public class Door extends ComponentModel {
     }
 
     public static ComponentModel createDoor(LevelComponentEntity componentData, int tileWidth, int tileHeight) {
-        ComponentModel component = new Wall(componentData, tileWidth, tileHeight);
+        ComponentModel component = new Door(componentData, tileWidth, tileHeight);
 
         return component;
     }

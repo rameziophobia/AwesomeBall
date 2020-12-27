@@ -11,11 +11,17 @@ public class Trap extends ComponentModel {
 
     @Override
     public Pair<Float, Float> doCollisionBehaviour(float deltaX, float deltaY, float currentX, float currentY, float width, float height) {
-        return null;
+
+        if(collidesWith(currentX, currentY, width, height)) {
+            //todo end game or try again
+            return Pair.create(0f, 0f);
+        }
+
+        return Pair.create(deltaX, deltaY);
     }
 
     public static ComponentModel createTrap(LevelComponentEntity componentData, int tileWidth, int tileHeight) {
-        ComponentModel component = new Wall(componentData, tileWidth, tileHeight);
+        ComponentModel component = new Trap(componentData, tileWidth, tileHeight);
 
         return component;
     }
