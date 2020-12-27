@@ -1,5 +1,7 @@
 package com.example.crazyball.model.obstacles;
 
+import androidx.core.util.Pair;
+
 import com.example.crazyball.model.tables.entities.LevelComponentEntity;
 
 public class Target extends ComponentModel {
@@ -8,8 +10,8 @@ public class Target extends ComponentModel {
     }
 
     @Override
-    public boolean checkCollision() {
-        return false;
+    public Pair<Float, Float> doCollisionBehaviour(float deltaX, float deltaY, float currentX, float currentY, float width, float height) {
+        return null;
     }
 
     public static ComponentModel createTarget(LevelComponentEntity componentData, int tileWidth, int tileHeight) {

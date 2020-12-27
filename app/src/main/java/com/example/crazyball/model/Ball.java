@@ -64,60 +64,14 @@ public class Ball {
             deltaY = screenHeight - currentY;
         }
 
+        lastCoord = Pair.create(deltaX, deltaY);
         for(ComponentModel componentModel: levelObstacles) {
-
-            // checks if there isnt a collision => continue loop
-            // If one rectangle is on left side of other
-            if (testLocationX >= componentModel.getEndX()
-                    || componentModel.getStartX() >= testLocationX + width){
-                continue;
-            }
-
-            // If one rectangle is above other
-            if (testLocationY >= componentModel.getEndY()
-                    || componentModel.getStartY() >= testLocationY + height){
-                continue;
-            }
-
-            boolean isIntersectingOnX =
-                    currentX + width <= componentModel.getStartX()
-                            || currentX >= componentModel.getEndX();
-
-
-            // test component left side collision
-            if(testLocationX + width > componentModel.getStartX() && currentX + width < componentModel.getStartX()){
-                if(isIntersectingOnX) {
-                    deltaX = 0;
-                }
-            }
-
-            // test component right side collision
-            if(testLocationX < componentModel.getEndX() && currentX  > componentModel.getEndX()){
-                if(isIntersectingOnX) {
-                    deltaX = 0;
-                }
-            }
-
-            // test component bottom side collision
-            if(testLocationY < componentModel.getEndY() && currentY > componentModel.getEndY()){
-                if(!isIntersectingOnX) {
-                    deltaY = 0;
-                }
-            }
-
-            // test component top side collision
-            if(testLocationY + height > componentModel.getStartX() && currentY < componentModel.getStartY()){
-                if(!isIntersectingOnX) {
-                    deltaY = 0;
-                }
+            if(componentModel.collidesWith(testLocationX, testLocationY, width, height)){
+                lastCoord = componentModel.doCollisionBehaviour(deltaX, deltaY, currentX, currentY, width, height);
             }
         }
 
-        lastCoord = Pair.create(deltaX, deltaY);
         this.deltaXY.postValue(lastCoord);
-
-        // todo check collision logic
-        // todo inform view model
     }
 
     private boolean sensorDidNotMove(float deltaX, float deltaY) {

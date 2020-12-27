@@ -1,8 +1,8 @@
 package com.example.crazyball.model.obstacles;
 
-import android.graphics.Rect;
-import android.graphics.drawable.shapes.RectShape;
 import android.widget.LinearLayout;
+
+import androidx.core.util.Pair;
 
 import com.example.crazyball.model.tables.entities.LevelComponentEntity;
 
@@ -45,7 +45,21 @@ public abstract class ComponentModel {
         return ob;
     }
 
-    public abstract boolean checkCollision();
+    public boolean collidesWith(float testLocationX, float testLocationY, float width, float height) {
+        // If one rectangle is on left side of other
+        if (testLocationX >= getEndX()
+                || getStartX() >= testLocationX + width){
+            return false;
+        }
+
+        // If one rectangle is above other
+        if (testLocationY >= getEndY()
+                || getStartY() >= testLocationY + height){
+            return false;
+        }
+
+        return true;
+    }
 
     public LevelComponentEntity getComponentData() {
         return componentData;
@@ -77,4 +91,6 @@ public abstract class ComponentModel {
     public int getEndY() {
         return endY;
     }
+
+    public abstract Pair<Float, Float> doCollisionBehaviour(float deltaX, float deltaY, float currentX, float currentY, float width, float height);
 }
