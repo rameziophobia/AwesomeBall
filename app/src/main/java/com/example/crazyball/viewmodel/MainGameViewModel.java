@@ -40,6 +40,7 @@ public class MainGameViewModel extends AndroidViewModel {
 
     public LiveData<ArrayList<ComponentModel>> loadLevel(int levelId){
         this.obstacles = levelRepository.loadLevel(levelId);
+        ball.addObstacles(obstacles);
         return obstacles;
     }
 
