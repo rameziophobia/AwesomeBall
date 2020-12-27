@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Insets;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -47,10 +48,13 @@ public class FullscreenActivity extends AppCompatActivity {
     private int sensorReadingNumber = 0;
     private SpringAnimation springAnimationX;
     private SpringAnimation springAnimationY;
+    private int levelId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        levelId = intent.getIntExtra("levelId", 0);
 
         setContentView(R.layout.activity_fullscreen);
         mContentView = findViewById(R.id.constraint_view);
@@ -81,45 +85,42 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     private void loadLevelImages() {
-        gameViewModel.getAllLevels().observe(this, new Observer<List<LevelWithComponents>>() {
+        final LiveData<ArrayList<ComponentModel>> componentModelListLiveData = gameViewModel.loadLevel(levelId);
+        componentModelListLiveData.observe(this, new Observer<ArrayList<ComponentModel>>() {
             @Override
-            public void onChanged(List<LevelWithComponents> levelWithComponents) {
-                final int id = levelWithComponents.get(0).Level.getId();
-                gameViewModel.getAllLevels().removeObserver(this);
-                final LiveData<ArrayList<ComponentModel>> arrayListLiveData = gameViewModel.loadLevel(id);
-                arrayListLiveData.observeForever(new Observer<ArrayList<ComponentModel>>() {
-                    @Override
-                    public void onChanged(ArrayList<ComponentModel> componentModels) {
-                        {
-                            arrayListLiveData.removeObserver(this);
-                            ConstraintLayout layout = findViewById(R.id.constraint_view);
-                            ConstraintSet set = new ConstraintSet();
-                            for (ComponentModel componentModel : componentModels) {
-                                ImageView imageView = new ImageView(getApplicationContext());
-                                imageView.setImageResource(componentModel.getComponentData().getImageId());
-                                imageView.setId(componentModel.getComponentData().getId());
-                                layout.addView(imageView, 0);
-
-                                set.clone(layout);
-                                set.connect(imageView.getId(), ConstraintSet.TOP,
-                                        layout.getId(), ConstraintSet.TOP,
-                                        componentModel.getStartY());
-
-                                set.connect(imageView.getId(), ConstraintSet.LEFT,
-                                        layout.getId(), ConstraintSet.LEFT,
-                                        componentModel.getStartX());
-
-                                set.applyTo(layout);
-
-                                imageView.post(() -> {
-                                    componentModel.setWidth(imageView.getWidth());
-                                    componentModel.setHeight(imageView.getHeight());
-                                });
-                            }
-                        }
+            public void onChanged(ArrayList<ComponentModel> componentModels) {
+                {
+                    componentModelListLiveData.removeObserver(this);
+                    ConstraintLayout layout = findViewById(R.id.constraint_view);
+                    ConstraintSet set = new ConstraintSet();
+                    for (ComponentModel componentModel : componentModels) {
+                        addComponentToLayout(layout, set, componentModel);
                     }
-                });
+                }
             }
+        });
+    }
+
+    private void addComponentToLayout(ConstraintLayout layout, ConstraintSet set, ComponentModel componentModel) {
+        ImageView imageView = new ImageView(getApplicationContext());
+        imageView.setImageResource(componentModel.getComponentData().getImageId());
+        imageView.setId(componentModel.getComponentData().getId());
+        layout.addView(imageView, 0);
+
+        set.clone(layout);
+        set.connect(imageView.getId(), ConstraintSet.TOP,
+                layout.getId(), ConstraintSet.TOP,
+                componentModel.getStartY());
+
+        set.connect(imageView.getId(), ConstraintSet.LEFT,
+                layout.getId(), ConstraintSet.LEFT,
+                componentModel.getStartX());
+
+        set.applyTo(layout);
+
+        imageView.post(() -> {
+            componentModel.setWidth(imageView.getWidth());
+            componentModel.setHeight(imageView.getHeight());
         });
     }
 
