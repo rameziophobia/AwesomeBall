@@ -1,5 +1,7 @@
 package com.example.crazyball.model.obstacles;
 
+import android.graphics.Rect;
+import android.graphics.drawable.shapes.RectShape;
 import android.widget.LinearLayout;
 
 import com.example.crazyball.model.tables.entities.LevelComponentEntity;
@@ -10,6 +12,10 @@ public abstract class ComponentModel {
     private final int startY;
     private final LinearLayout.LayoutParams layoutParams;
     private LevelComponentEntity componentData;
+    private int endX;
+    private int endY;
+    private int width;
+    private int height;
 
     protected ComponentModel(LevelComponentEntity componentData, int tileWidth, int tileHeight) {
         this.componentData = componentData;
@@ -51,5 +57,24 @@ public abstract class ComponentModel {
 
     public int getStartY() {
         return startY;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+        this.endX = width + startX;
+//        this.collisionRectangle = new Rect()
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+        this.endY = height + startY;
+    }
+
+    public int getEndX() {
+        return endX;
+    }
+
+    public int getEndY() {
+        return endY;
     }
 }

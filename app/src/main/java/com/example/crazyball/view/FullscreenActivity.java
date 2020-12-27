@@ -44,6 +44,10 @@ public class FullscreenActivity extends AppCompatActivity {
     private MainGameViewModel gameViewModel;
     private View mContentView;
 
+    private int sensorReadingNumber = 0;
+    private SpringAnimation springAnimationX;
+    private SpringAnimation springAnimationY;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +75,7 @@ public class FullscreenActivity extends AppCompatActivity {
 
         gameViewModel.moveBall().observe(this, this::onModelBallChanged);
 
-        sensorManager.registerListener(sensorListener,  sensor, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(sensorListener,  sensor, SensorManager.SENSOR_DELAY_GAME);
         springAnimationX = new SpringAnimation(ballImageView, DynamicAnimation.TRANSLATION_X);
         springAnimationY = new SpringAnimation(ballImageView, DynamicAnimation.TRANSLATION_Y);
     }
@@ -106,6 +110,11 @@ public class FullscreenActivity extends AppCompatActivity {
                                         componentModel.getStartX());
 
                                 set.applyTo(layout);
+
+                                imageView.post(() -> {
+                                    componentModel.setWidth(imageView.getWidth());
+                                    componentModel.setHeight(imageView.getHeight());
+                                });
                             }
                         }
                     }
@@ -167,16 +176,11 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
 
-
-    private int sensorReadingNumber = 0;
-    SpringAnimation springAnimationX;
-    SpringAnimation springAnimationY;
-
     SensorEventListener sensorListener = new SensorEventListener() {
 
         public void onSensorChanged(SensorEvent event) {
             sensorReadingNumber++;
-            if(sensorReadingNumber % 10 == 0) {
+            if(sensorReadingNumber % 300 == 0) {
                 Log.d("sensor","========= ACCELEROMETER SENSOR X value = "+ event.values[0] + "\n");
                 Log.d("sensor","========= ACCELEROMETER SENSOR Y value = "+ event.values[1] + "\n");
                 Log.d("sensor","========= ACCELEROMETER SENSOR Z value = "+ event.values[2] + "\n");
