@@ -5,7 +5,7 @@
     android:viewportHeight="40">
   <path
       android:pathData="M0,0L40,0L40,40L0,40L0,0Z"
-      android:fillColor="#995fff"/>
+      android:fillColor="#1F0C2C"/>
   <group>
     <clip-path
         android:pathData="M0,0L40,0L40,40L0,40L0,0Z"/>
@@ -14,6 +14,6 @@
         android:pathData="M0,0L40,0L40,40L0,40L0,0Z"
         android:strokeWidth="2"
         android:fillAlpha="0"
-        android:strokeColor="#160dc6"/>
+        android:strokeColor="#995fff"/>
   </group>
 </vector>

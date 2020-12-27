@@ -15,7 +15,7 @@ import com.example.crazyball.model.tables.entities.LevelComponentEntity;
 import com.example.crazyball.model.tables.entities.LevelEntity;
 import com.example.crazyball.model.tables.relations.LevelWithComponents;
 
-@Database(entities = {LevelComponentEntity.class, LevelEntity.class}, version = 3, exportSchema = false)
+@Database(entities = {LevelComponentEntity.class, LevelEntity.class}, version = 4, exportSchema = false)
 public abstract class LevelRoomDatabase extends RoomDatabase {
     public abstract LevelDao levelDao();
     public abstract LevelComponentDao levelComponentDao();
@@ -58,7 +58,7 @@ public abstract class LevelRoomDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            levelDao.deleteAllLevels();
+//            levelDao.deleteAllLevels();
             LevelEntity level = new LevelEntity("1st level");
             level.setDifficultyLevel("Hard");
             long insertedId = levelDao.insert(level);
