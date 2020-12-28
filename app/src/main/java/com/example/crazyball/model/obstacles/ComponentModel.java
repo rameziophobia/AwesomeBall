@@ -40,6 +40,34 @@ public abstract class ComponentModel {
         return true;
     }
 
+    protected boolean isCollisionAreaAboveThreshold(float currentX, float currentY, float width, float height, float threshold) {
+        // https://www.geeksforgeeks.org/total-area-two-overlapping-rectangles/
+
+        // Area of 1st Rectangle => ball area
+        int area1 = (int) (width * height);
+
+
+        // Length of intersecting part i.e
+        // start from max(l1.x, l2.x) of
+        // x-coordinate and end at min(r1.x,
+        // r2.x) x-coordinate by subtracting
+        // start from end we get required
+        // lengths
+
+        int x_dist = (int) (Math.min(currentX + width, getEndX())
+                - Math.max(currentX, getStartX()));
+        int y_dist = (int) (Math.min(currentY + height, getEndY())
+                - Math.max(currentY, getStartY()));
+
+        int areaI = 0;
+        if(x_dist > 0 && y_dist > 0) {
+            areaI = x_dist * y_dist;
+        }
+
+        return areaI >= threshold * area1;
+    }
+
+
     public LevelComponentEntity getComponentData() {
         return componentData;
     }

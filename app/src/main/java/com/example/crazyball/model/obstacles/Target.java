@@ -15,8 +15,7 @@ public class Target extends ComponentModel {
     public Pair<Float, Float> doCollisionBehaviour(float deltaX, float deltaY, float currentX,
                                                    float currentY, float width, float height) {
 
-        // todo check collision % >= 40%
-        if(collidesWith(currentX, currentY, width, height)) {
+        if(collidesWith(currentX, currentY, width, height) && isCollisionAreaAboveThreshold(currentX, currentY, width, height, 0.4f)) {
             winnableListener.onLevelWon();
             return Pair.create(0f, 0f);
         }

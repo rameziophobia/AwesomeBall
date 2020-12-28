@@ -33,11 +33,9 @@ import com.example.crazyball.R;
 import com.example.crazyball.model.obstacles.ComponentModel;
 import com.example.crazyball.model.obstacles.IFailable;
 import com.example.crazyball.model.obstacles.IWinnable;
-import com.example.crazyball.model.tables.relations.LevelWithComponents;
 import com.example.crazyball.viewmodel.MainGameViewModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class FullscreenActivity extends AppCompatActivity {
@@ -54,6 +52,7 @@ public class FullscreenActivity extends AppCompatActivity {
     private int levelId;
     private IFailable onLevelFailed;
     private IWinnable onLevelWon;
+    private Sensor rotationVectorSensor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +74,7 @@ public class FullscreenActivity extends AppCompatActivity {
         loadLevelImages();
 
         sensorManager = (SensorManager) getApplicationContext().getSystemService(Context.SENSOR_SERVICE);
-        Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        rotationVectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         ballImageView = findViewById(R.id.ball);
 
 
@@ -87,21 +86,42 @@ public class FullscreenActivity extends AppCompatActivity {
 
         gameViewModel.moveBall().observe(this, this::onModelBallChanged);
 
-        sensorManager.registerListener(sensorListener,  sensor, SensorManager.SENSOR_DELAY_GAME);
         springAnimationX = new SpringAnimation(ballImageView, DynamicAnimation.TRANSLATION_X);
         springAnimationY = new SpringAnimation(ballImageView, DynamicAnimation.TRANSLATION_Y);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sensorManager.registerListener(sensorListener, rotationVectorSensor, SensorManager.SENSOR_DELAY_GAME);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopBallMovements();
+    }
+
     private void setOnLevelFailedCallback() {
         onLevelFailed = () -> {
+            stopBallMovements();
+            sensorManager.unregisterListener(sensorListener);
             Toast.makeText(this, "saaaaad level lost", Toast.LENGTH_LONG).show();
         };
     }
 
     private void setOnLevelWonCallback() {
         onLevelWon = () -> {
+            stopBallMovements();
+            sensorManager.unregisterListener(sensorListener);
             Toast.makeText(this, "woooo level won", Toast.LENGTH_LONG).show();
         };
+    }
+
+    private void stopBallMovements() {
+        sensorManager.unregisterListener(sensorListener);
+        springAnimationY.cancel();
+        springAnimationX.cancel();
     }
 
     private void loadLevelImages() {
@@ -143,6 +163,8 @@ public class FullscreenActivity extends AppCompatActivity {
             componentModel.setHeight(imageView.getHeight());
         });
     }
+
+
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
