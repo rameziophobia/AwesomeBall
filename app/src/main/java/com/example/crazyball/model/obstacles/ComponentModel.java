@@ -24,27 +24,6 @@ public abstract class ComponentModel {
         this.layoutParams = new LinearLayout.LayoutParams(100, 100);
     }
 
-    public static ComponentModel createComponent(LevelComponentEntity componentData, int tileWidth, int tileHeight) {
-        ComponentModel ob;
-        switch (componentData.getType()) {
-            case "wall":
-                ob = Wall.createWall(componentData, tileWidth, tileHeight);
-                break;
-            case "trap":
-                ob = Trap.createTrap(componentData, tileWidth, tileHeight);
-                break;
-            case "key":
-                ob = KeyTile.createKeyTile(componentData, tileWidth, tileHeight);
-                break;
-            case "door":
-                ob = Door.createDoor(componentData, tileWidth, tileHeight);
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value in obstacle creation: " + componentData.getType());
-        }
-        return ob;
-    }
-
     public boolean collidesWith(float testLocationX, float testLocationY, float width, float height) {
         // If one rectangle is on left side of other
         if (testLocationX >= getEndX()

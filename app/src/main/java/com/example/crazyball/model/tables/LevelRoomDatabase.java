@@ -86,7 +86,7 @@ public abstract class LevelRoomDatabase extends RoomDatabase {
             }
 
             component = new LevelComponentEntity(
-                    "key", 6, 30, R.drawable.ic_yellow_2x2_check, insertedId);
+                    "target", 6, 30, R.drawable.ic_yellow_2x2_check, insertedId);
             levelComponentDao.insert(component);
 
             level = new LevelEntity("2nd level");

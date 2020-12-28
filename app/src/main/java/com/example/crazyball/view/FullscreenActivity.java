@@ -27,9 +27,12 @@ import android.view.View;
 import android.view.WindowInsets;
 import android.view.WindowMetrics;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.crazyball.R;
 import com.example.crazyball.model.obstacles.ComponentModel;
+import com.example.crazyball.model.obstacles.IFailable;
+import com.example.crazyball.model.obstacles.IWinnable;
 import com.example.crazyball.model.tables.relations.LevelWithComponents;
 import com.example.crazyball.viewmodel.MainGameViewModel;
 
@@ -49,6 +52,8 @@ public class FullscreenActivity extends AppCompatActivity {
     private SpringAnimation springAnimationX;
     private SpringAnimation springAnimationY;
     private int levelId;
+    private IFailable onLevelFailed;
+    private IWinnable onLevelWon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +63,9 @@ public class FullscreenActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_fullscreen);
         mContentView = findViewById(R.id.constraint_view);
+
+        setOnLevelWonCallback();
+        setOnLevelFailedCallback();
 
         gameViewModel = new ViewModelProvider
                 .AndroidViewModelFactory(getApplication())
@@ -84,8 +92,20 @@ public class FullscreenActivity extends AppCompatActivity {
         springAnimationY = new SpringAnimation(ballImageView, DynamicAnimation.TRANSLATION_Y);
     }
 
+    private void setOnLevelFailedCallback() {
+        onLevelFailed = () -> {
+            Toast.makeText(this, "saaaaad level lost", Toast.LENGTH_LONG).show();
+        };
+    }
+
+    private void setOnLevelWonCallback() {
+        onLevelWon = () -> {
+            Toast.makeText(this, "woooo level won", Toast.LENGTH_LONG).show();
+        };
+    }
+
     private void loadLevelImages() {
-        final LiveData<ArrayList<ComponentModel>> componentModelListLiveData = gameViewModel.loadLevel(levelId);
+        final LiveData<ArrayList<ComponentModel>> componentModelListLiveData = gameViewModel.loadLevel(levelId, onLevelFailed, onLevelWon);
         componentModelListLiveData.observe(this, new Observer<ArrayList<ComponentModel>>() {
             @Override
             public void onChanged(ArrayList<ComponentModel> componentModels) {
