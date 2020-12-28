@@ -61,7 +61,7 @@ public class FullscreenActivity extends AppCompatActivity {
         levelId = intent.getIntExtra("levelId", 0);
 
         setContentView(R.layout.activity_fullscreen);
-        mContentView = findViewById(R.id.constraint_view);
+        mContentView = findViewById(R.id.game_constraint_layout);
 
         setOnLevelWonCallback();
         setOnLevelFailedCallback();
@@ -115,6 +115,9 @@ public class FullscreenActivity extends AppCompatActivity {
             stopBallMovements();
             sensorManager.unregisterListener(sensorListener);
             Toast.makeText(this, "woooo level won", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this, LevelResultActivity.class);
+            intent.putExtra("hasWon", true);
+            startActivity(intent);
         };
     }
 
@@ -131,7 +134,7 @@ public class FullscreenActivity extends AppCompatActivity {
             public void onChanged(ArrayList<ComponentModel> componentModels) {
                 {
                     componentModelListLiveData.removeObserver(this);
-                    ConstraintLayout layout = findViewById(R.id.constraint_view);
+                    ConstraintLayout layout = findViewById(R.id.game_constraint_layout);
                     ConstraintSet set = new ConstraintSet();
                     for (ComponentModel componentModel : componentModels) {
                         addComponentToLayout(layout, set, componentModel);
