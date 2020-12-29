@@ -108,7 +108,11 @@ public class FullscreenActivity extends AppCompatActivity {
         onLevelFailed = () -> {
             stopBallMovements();
             sensorManager.unregisterListener(sensorListener);
-            Toast.makeText(this, "saaaaad level lost", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this, LevelResultActivity.class);
+            intent.putExtra("hasWon", false);
+            intent.putExtra("currentLevel", levelId);
+            intent.putExtra("score", 0);
+            startActivity(intent);
         };
     }
 
@@ -116,9 +120,10 @@ public class FullscreenActivity extends AppCompatActivity {
         onLevelWon = () -> {
             stopBallMovements();
             sensorManager.unregisterListener(sensorListener);
-            Toast.makeText(this, "woooo level won", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this, LevelResultActivity.class);
             intent.putExtra("hasWon", true);
+            intent.putExtra("currentLevel", levelId);
+            intent.putExtra("score", 1000);
             startActivity(intent);
         };
     }
@@ -127,6 +132,12 @@ public class FullscreenActivity extends AppCompatActivity {
         sensorManager.unregisterListener(sensorListener);
         springAnimationY.cancel();
         springAnimationX.cancel();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, PauseLevelActivity.class);
+        startActivity(intent);
     }
 
     private void loadLevelImages() {

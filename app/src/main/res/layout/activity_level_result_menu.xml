@@ -133,7 +133,7 @@ tools:context=".view.LevelResultActivity">
                             android:textSize="30sp" />
 
                         <TextView
-                            android:id="@+id/textView4"
+                            android:id="@+id/result_score_text_view"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"

@@ -6,11 +6,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.dynamicanimation.animation.DynamicAnimation;
 import androidx.dynamicanimation.animation.SpringAnimation;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,7 +18,7 @@ import java.util.Random;
 
 public class LevelResultActivity extends AppCompatActivity {
 
-    private long currentLevel;
+    private int currentLevelId;
     private int score;
     private ConstraintLayout starsConstraintLayout;
     private int numStars;
@@ -34,9 +31,11 @@ public class LevelResultActivity extends AppCompatActivity {
         starsConstraintLayout = findViewById(R.id.result_constraint_layout);
 
         Intent intent = getIntent();
-        this.currentLevel = intent.getLongExtra("currentLevel", 0);
-        this.score = intent.getIntExtra("currentLevel", 0);
-        hasWon = intent.getBooleanExtra("hasWon", true);
+        this.currentLevelId = intent.getIntExtra("currentLevel", 0);
+        this.score = intent.getIntExtra("score", 0);
+        this.hasWon = intent.getBooleanExtra("hasWon", true);
+
+        ((TextView)findViewById(R.id.result_score_text_view)).setText(String.valueOf(score));
 
         starsConstraintLayout.post(() -> {
             if(hasWon) {
@@ -152,12 +151,17 @@ public class LevelResultActivity extends AppCompatActivity {
     }
 
     public void onNextButtonPressed(View view) {
+        Intent intent = new Intent(this, FullscreenActivity.class);
+        // todo check if level exists
+        intent.putExtra("levelId", currentLevelId + 1);
+        view.getContext().startActivity(intent);
+        finish();
     }
 
     public void onTryAgainButtonPressed(View view) {
-        Intent intent = new Intent(this, LevelSelector.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+        Intent intent = new Intent(this, FullscreenActivity.class);
+        intent.putExtra("levelId", currentLevelId);
+        view.getContext().startActivity(intent);
         finish();
     }
 
