@@ -5,7 +5,7 @@
     android:id="@+id/game_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/purple_300"
+    android:background="@drawable/purple_gradient"
     android:theme="@style/ThemeOverlay.CrazyBall.FullscreenContainer"
     tools:context=".view.FullscreenActivity">
 
@@ -14,8 +14,8 @@
         android:id="@+id/ball"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:translationX="184dp"
-        android:translationY="94dp"
+        android:translationX="94dp"
+        android:translationY="180dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ball01" />

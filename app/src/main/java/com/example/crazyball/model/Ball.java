@@ -29,8 +29,8 @@ public class Ball {
         this.deltaXY.postValue(lastCoord);
     }
 
-    public void moveBall(float deltaX, float deltaY, float currentX, float currentY) {
-        deltaX = deltaX * 100;
+    public void moveBall(float deltaY, float deltaX, float currentX, float currentY) {
+        deltaX = -deltaX * 100;
         deltaY = deltaY * 100;
 
         Log.d("sensor", "received dx " + deltaX + "received dy " + deltaY);

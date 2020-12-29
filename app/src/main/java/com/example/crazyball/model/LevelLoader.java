@@ -22,8 +22,8 @@ public class LevelLoader {
     private int tileWidth;
     private int tileHeight;
 
-    private final int NUM_TILES_PER_COLUMN = 36;
-    private final int NUM_TILES_PER_ROW = 16;
+    private final int NUM_TILES_PER_COLUMN = 16;
+    private final int NUM_TILES_PER_ROW = 36;
 
     public static LevelLoader getInstance() {
         if (INSTANCE == null) {

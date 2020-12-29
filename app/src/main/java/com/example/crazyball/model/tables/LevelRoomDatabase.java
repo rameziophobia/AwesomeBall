@@ -68,25 +68,25 @@ public abstract class LevelRoomDatabase extends RoomDatabase {
             // todo retrofit get data
 
             LevelComponentEntity component = new LevelComponentEntity(
-                    "wall", 0, 12, R.drawable.ic_wall_hor, insertedId);
+                    "wall", 12, 0, R.drawable.ic_wall_vert, insertedId);
             levelComponentDao.insert(component);
 
             component = new LevelComponentEntity(
-                    "wall", 8, 18, R.drawable.ic_wall_hor, insertedId);
+                    "wall", 18, 8, R.drawable.ic_wall_vert, insertedId);
             levelComponentDao.insert(component);
 
             component = new LevelComponentEntity(
-                    "wall", 0, 24, R.drawable.ic_wall_hor, insertedId);
+                    "wall", 24, 0, R.drawable.ic_wall_vert, insertedId);
             levelComponentDao.insert(component);
 
             for(int i = 0; i < 5; i++){
                 component = new LevelComponentEntity(
-                        "trap", 0, 14 + 2 * i, R.drawable.ic_red_2x2_trap, insertedId);
+                        "trap", 14 + 2 * i, 0, R.drawable.ic_red_2x2_trap, insertedId);
                 levelComponentDao.insert(component);
             }
 
             component = new LevelComponentEntity(
-                    "target", 6, 30, R.drawable.ic_yellow_2x2_check, insertedId);
+                    "target", 30, 6, R.drawable.ic_yellow_2x2_check, insertedId);
             levelComponentDao.insert(component);
 
             level = new LevelEntity("2nd level");
