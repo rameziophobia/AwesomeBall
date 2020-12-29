@@ -46,9 +46,9 @@ public class Ball {
             deltaX += testLocationX;
         }
 
-        if(testLocationX + this.width> screenWidth){
+        if(testLocationX> screenWidth){
             Log.d("location", "current x " + currentX + "test x" + testLocationX + "width " + this.width);
-            deltaX -= (screenWidth - testLocationX - this.width);
+            deltaX -= (screenWidth - testLocationX);
         }
 
         if(testLocationY < 0){
@@ -57,11 +57,11 @@ public class Ball {
             deltaY -= testLocationY;
         }
 
-        if(testLocationY > screenHeight){
+        if(testLocationY + height > screenHeight){
             Log.d("location", "current y " + currentY + "test y" + testLocationY + "hiht " + this.height +  " max height" + screenHeight);
             float v = screenHeight - currentY;
             Log.d("location", "new delta y " + (screenHeight - currentY) + " old delta y" + deltaY );
-            deltaY = screenHeight - currentY;
+            deltaY = screenHeight - currentY - height;
         }
 
         lastCoord = Pair.create(deltaX, deltaY);

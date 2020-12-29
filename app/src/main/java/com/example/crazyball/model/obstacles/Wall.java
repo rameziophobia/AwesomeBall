@@ -42,7 +42,7 @@ public class Wall extends ComponentModel {
         }
 
         // test component top side collision
-        if(testLocationY + height > getStartX() && currentY < getStartY()){
+        if(testLocationY + height > getStartY() && currentY < getStartY()){
             if(!isIntersectingOnX) {
                 deltaY = 0f;
             }
