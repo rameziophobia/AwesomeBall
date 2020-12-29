@@ -53,6 +53,7 @@ public class PauseLevelActivity extends AppCompatActivity {
     public void onTryAgainButtonPressed(View view) {
         Intent intent = new Intent(this, FullscreenActivity.class);
         intent.putExtra("levelId", currentLevelId);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         view.getContext().startActivity(intent);
         finish();
     }
