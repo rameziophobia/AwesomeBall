@@ -8,4 +8,5 @@
     <string name="level_difficulty_placeholder">Easy</string>
     <string name="dummy_level_name">dummy name</string>
     <string name="obstacle_wall">wall</string>
+    <string name="lossTitle">Try again</string>
 </resources>

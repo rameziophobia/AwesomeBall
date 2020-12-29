@@ -8,16 +8,9 @@ android:layout_height="match_parent"
 android:orientation="vertical"
 tools:context=".view.LevelResultActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/result_constraint_layout"
+    <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TableLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
         <TableRow
             android:layout_width="match_parent"
@@ -94,21 +87,21 @@ tools:context=".view.LevelResultActivity">
                             android:layout_weight="2" />
 
                         <ImageView
-                            android:id="@+id/imageView"
+                            android:id="@+id/first_star_imageView"
                             android:layout_width="0dp"
                             android:layout_height="100dp"
                             android:layout_weight="1"
                             android:src="@drawable/ic_grey_star" />
 
                         <ImageView
-                            android:id="@+id/imageView3"
+                            android:id="@+id/second_star_imageView"
                             android:layout_width="0dp"
                             android:layout_height="100dp"
                             android:layout_weight="1"
                             android:src="@drawable/ic_grey_star" />
 
                         <ImageView
-                            android:id="@+id/imageView4"
+                            android:id="@+id/third_star_imageView"
                             android:layout_width="0dp"
                             android:layout_height="100dp"
                             android:layout_weight="1"
@@ -170,6 +163,7 @@ tools:context=".view.LevelResultActivity">
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:layout_weight="1"
+                            android:onClick="onNextButtonPressed"
                             android:padding="5dp"
                             android:text="next"
                             android:textSize="18sp" />
@@ -180,6 +174,7 @@ tools:context=".view.LevelResultActivity">
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:layout_weight="1"
+                            android:onClick="onTryAgainButtonPressed"
                             android:padding="5dp"
                             android:text="try again"
                             android:textSize="18sp" />
@@ -190,6 +185,7 @@ tools:context=".view.LevelResultActivity">
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:layout_weight="1"
+                            android:onClick="onMainMenuButtonPressed"
                             android:padding="5dp"
                             android:text="Main menu"
                             android:textSize="18sp" />
@@ -205,15 +201,58 @@ tools:context=".view.LevelResultActivity">
         </TableRow>
 
         <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2">
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </TableRow>
+
+    </TableLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/result_constraint_layout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2">
+        android:layout_height="match_parent">
 
-        <Space
+        <ImageView
+            android:id="@+id/first_purple_star_imageView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </TableRow>
+            android:layout_height="100dp"
 
-</TableLayout>
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_purple_star"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/second_purple_star_imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+
+            android:layout_marginEnd="1dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_purple_star"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@+id/third_purple_star_imageView"
+            app:layout_constraintStart_toEndOf="@+id/first_purple_star_imageView"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/third_purple_star_imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_purple_star"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
