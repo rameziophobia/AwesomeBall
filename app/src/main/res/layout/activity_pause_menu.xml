@@ -7,4 +7,50 @@
     android:layout_height="match_parent"
     tools:context=".view.PauseLevelActivity">
 
+    <Button
+        android:id="@+id/btn_continue_pause_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onContinueButtonPressed"
+        android:text="continue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_main_menu_pause_screen"
+        app:layout_constraintStart_toEndOf="@+id/btn_try_again_pause_screen"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:layout_constraintVertical_bias="0.347" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Paused"
+        android:textColor="@color/white"
+        android:textSize="92sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.331" />
+
+    <Button
+        android:id="@+id/btn_main_menu_pause_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onMainMenuButtonPressed"
+        android:text="main menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView3"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:layout_constraintVertical_bias="0.347" />
+
+    <Button
+        android:id="@+id/btn_try_again_pause_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onTryAgainButtonPressed"
+        android:text="Try again"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/textView3"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:layout_constraintVertical_bias="0.347" />
 </androidx.constraintlayout.widget.ConstraintLayout>

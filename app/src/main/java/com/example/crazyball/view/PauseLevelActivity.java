@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -11,10 +12,15 @@ import com.example.crazyball.R;
 
 public class PauseLevelActivity extends AppCompatActivity {
 
+    private int currentLevelId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pause_menu);
+
+        Intent intent = getIntent();
+        this.currentLevelId = intent.getIntExtra("currentLevel", 0);
     }
 
     @Override
@@ -34,4 +40,20 @@ public class PauseLevelActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
+    public void onContinueButtonPressed(View view) {
+        finish();
+    }
+
+    public void onMainMenuButtonPressed(View view) {
+        Intent intent = new Intent(this, LevelSelector.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    public void onTryAgainButtonPressed(View view) {
+        Intent intent = new Intent(this, FullscreenActivity.class);
+        intent.putExtra("levelId", currentLevelId);
+        view.getContext().startActivity(intent);
+        finish();
+    }
 }

@@ -137,6 +137,7 @@ public class FullscreenActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, PauseLevelActivity.class);
+        intent.putExtra("currentLevel", levelId);
         startActivity(intent);
     }
 
