@@ -22,8 +22,8 @@ public class Ball {
     private float width;
     private float height;
     private ArrayList<ComponentModel> levelObstacles = new ArrayList<>();
-    private double nextDeltaX;
     private double nextDeltaY;
+    private double nextDeltaX;
 
     public Ball() {
         this.deltaXY = new MutableLiveData<>();
@@ -31,9 +31,9 @@ public class Ball {
         this.deltaXY.postValue(lastCoord);
     }
 
-    public void moveBall(float deltaY, float deltaX, float currentX, float currentY) {
-        deltaX = -deltaX * 100;
-        deltaY = deltaY * 100;
+    public void moveBall(float currentX, float currentY) {
+        float deltaY = (float) (nextDeltaY * 70);
+        float deltaX = (float) (nextDeltaX * 70);
 
         Log.d("sensor", "received dx " + deltaX + "received dy " + deltaY);
         if (sensorDidNotMove(deltaX, deltaY)) {
@@ -102,8 +102,8 @@ public class Ball {
         });
     }
 
-    public void updateNextSensorReading(double x, double y) {
-        this.nextDeltaX = x;
-        this.nextDeltaY = y;
+    public void updateNextSensorReading(double theta, double psi) {
+        this.nextDeltaY = theta;
+        this.nextDeltaX = psi;
     }
 }

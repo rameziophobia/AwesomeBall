@@ -36,8 +36,8 @@ public class MainGameViewModel extends AndroidViewModel {
         ball = new Ball();
     }
 
-    public void sensorsMoved(float deltaX, float deltaY, float currentX, float currentY) {
-        ball.moveBall(deltaX, deltaY, currentX, currentY);
+    public void updateBallLocation(float currentX, float currentY) {
+        ball.moveBall(currentX, currentY);
     }
 
     public MutableLiveData<Pair<Float, Float>> moveBall() {
@@ -67,20 +67,17 @@ public class MainGameViewModel extends AndroidViewModel {
         return obstacles;
     }
 
-    public void sensorsMoved(float[] rotation_matrix) {
+    public void sensorMoved(float[] rotation_matrix) {
 //        double phi = atan2(-rotation_matrix[3], rotation_matrix[0]);
         double theta = asin(rotation_matrix[6]);
         double psi = atan2(-rotation_matrix[7], rotation_matrix[8]);
-        // positive towards down left
-        double x = theta;
-        double y = psi;
 
 //        Log.d("sensor_read","========= SENSOR X2 value = "+ phi + "\n");
         Log.d("sensor_read","========= SENSOR Y2 value = " + theta + "\n");
         Log.d("sensor_read","========= SENSOR Z2 value = " + psi + "\n");
         Log.d("sensor_read","========= _____________________________________\n");
 
-        ball.updateNextSensorReading(x, y);
+        ball.updateNextSensorReading(theta, psi);
 
     }
 

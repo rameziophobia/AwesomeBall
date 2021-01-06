@@ -237,8 +237,8 @@ public class FullscreenActivity extends AppCompatActivity {
 
             float[] rotation_matrix = new float[9];
             SensorManager.getRotationMatrixFromVector(rotation_matrix, event.values);
-            gameViewModel.sensorsMoved(rotation_matrix);
-            gameViewModel.sensorsMoved(ballImageView.getX(), ballImageView.getY());
+            gameViewModel.sensorMoved(rotation_matrix);
+            gameViewModel.updateBallLocation(ballImageView.getX(), ballImageView.getY());
         }
 
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
