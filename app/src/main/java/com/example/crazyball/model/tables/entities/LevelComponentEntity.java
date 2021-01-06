@@ -6,6 +6,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import com.example.crazyball.model.EComponentType;
+
 @Entity(tableName = "level_component",
         foreignKeys = @ForeignKey(entity = LevelEntity.class,
         parentColumns = "id",
@@ -47,6 +49,14 @@ public class LevelComponentEntity {
         this.locationY = locationY;
         this.imageId = imageId;
         this.levelId = levelId;
+    }
+
+    public LevelComponentEntity(ComponentEntityBuilder builder) {
+        this.type = builder.getType();
+        this.locationX = builder.getLocationX();
+        this.locationY = builder.getLocationY();
+        this.imageId = builder.getImageId();
+        this.levelId = builder.getLevelId();
     }
 
 

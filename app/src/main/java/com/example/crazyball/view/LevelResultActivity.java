@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.dynamicanimation.animation.DynamicAnimation;
 import androidx.dynamicanimation.animation.SpringAnimation;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.crazyball.R;
+import com.example.crazyball.viewmodel.MainGameViewModel;
+import com.example.crazyball.viewmodel.ScoreViewModel;
 
 import java.util.Random;
 
@@ -23,6 +26,9 @@ public class LevelResultActivity extends AppCompatActivity {
     private ConstraintLayout starsConstraintLayout;
     private int numStars;
     private boolean hasWon;
+    private long timeElapsed;
+    private int starsCollected;
+    private ScoreViewModel scoreViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,62 +38,65 @@ public class LevelResultActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         this.currentLevelId = intent.getIntExtra("currentLevel", 0);
-        this.score = intent.getIntExtra("score", 0);
-        this.hasWon = intent.getBooleanExtra("hasWon", true);
+        this.hasWon = intent.getBooleanExtra("hasWon", false);
+        this.starsCollected = intent.getIntExtra("stars", 0);
+        this.timeElapsed = intent.getLongExtra("timeElapsed", 9999);
 
-        ((TextView)findViewById(R.id.result_score_text_view)).setText(String.valueOf(score));
 
-        starsConstraintLayout.post(() -> {
-            if(hasWon) {
+        if (hasWon) {
+            scoreViewModel = new ViewModelProvider
+                    .AndroidViewModelFactory(getApplication())
+                    .create(ScoreViewModel.class);
+
+            scoreViewModel.loadLevel(currentLevelId);
+            scoreViewModel.sendScoreData(timeElapsed, starsCollected);
+            scoreViewModel.getScore().observe(this, scorePair -> starsConstraintLayout.post(() -> {
                 changeTitleToWin();
-                startStarsAnimation();
-            } else {
-                changeTitleToLoss();
-            }
-            startScoreAnimation();
-        });
+                score = scorePair.first;
+                numStars = scorePair.second;
+                animateStars();
+                startScoreAnimation();
+            }));
+
+        } else {
+            starsConstraintLayout.post(this::changeTitleToLoss);
+        }
     }
 
     private void startScoreAnimation() {
         // todo score animation
+        ((TextView)findViewById(R.id.result_score_text_view)).setText(String.valueOf(score));
     }
 
     private void changeTitleToLoss() {
         TextView title = findViewById(R.id.result_status_textView);
+        ((TextView)findViewById(R.id.result_score_text_view)).setText(String.valueOf(0));
         title.setText(R.string.lossTitle);
     }
 
-    private void startStarsAnimation() {
-        // todo get num stars
-        numStars = 3;
 
+    private void animateStars() {
         animateStars(0);
     }
 
     private void animateStars(int currentStarIndex) {
-        if (currentStarIndex >= numStars) {
-            return;
+        if (currentStarIndex < numStars) {
+            ImageView coloredStarImageView = getColoredStarImageView(currentStarIndex);
+            ImageView GreyStarImageView = getGreyStarImageView(currentStarIndex);
+            coloredStarImageView.setVisibility(View.VISIBLE);
+            int[] greyStarCoordinates = new int[2];
+            int[] coloredStarCoordinates = new int[2];
+            GreyStarImageView.getLocationOnScreen(greyStarCoordinates);
+            coloredStarImageView.getLocationOnScreen(coloredStarCoordinates);
+            SpringAnimation springAnimationX = new SpringAnimation(coloredStarImageView, DynamicAnimation.TRANSLATION_X);
+            SpringAnimation springAnimationY = new SpringAnimation(coloredStarImageView, DynamicAnimation.TRANSLATION_Y);
+            springAnimationX.animateToFinalPosition(greyStarCoordinates[0] - coloredStarCoordinates[0]);
+            springAnimationY.animateToFinalPosition(greyStarCoordinates[1] - coloredStarCoordinates[1]);
+            springAnimationX.addEndListener((animation, canceled, value, velocity) -> {
+                animateStars(currentStarIndex + 1);
+            });
         }
 
-        ImageView coloredStarImageView =  getColoredStarImageView(currentStarIndex);
-        ImageView GreyStarImageView = getGreyStarImageView(currentStarIndex);
-
-        coloredStarImageView.setVisibility(View.VISIBLE);
-
-        int[] greyStarCoordinates = new int[2];
-        int[] coloredStarCoordinates = new int[2];
-        GreyStarImageView.getLocationOnScreen(greyStarCoordinates);
-        coloredStarImageView.getLocationOnScreen(coloredStarCoordinates);
-
-        SpringAnimation springAnimationX = new SpringAnimation(coloredStarImageView, DynamicAnimation.TRANSLATION_X);
-        SpringAnimation springAnimationY = new SpringAnimation(coloredStarImageView, DynamicAnimation.TRANSLATION_Y);
-
-        springAnimationX.animateToFinalPosition(greyStarCoordinates[0] - coloredStarCoordinates[0]);
-        springAnimationY.animateToFinalPosition(greyStarCoordinates[1] - coloredStarCoordinates[1]);
-
-        springAnimationX.addEndListener((animation, canceled, value, velocity) -> {
-            animateStars(currentStarIndex + 1);
-        });
     }
 
     private ImageView getColoredStarImageView(int currentStarIndex) {

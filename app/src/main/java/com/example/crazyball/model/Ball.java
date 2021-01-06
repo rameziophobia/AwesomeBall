@@ -22,6 +22,8 @@ public class Ball {
     private float width;
     private float height;
     private ArrayList<ComponentModel> levelObstacles = new ArrayList<>();
+    private double nextDeltaY;
+    private double nextDeltaX;
 
     public Ball() {
         this.deltaXY = new MutableLiveData<>();
@@ -29,11 +31,10 @@ public class Ball {
         this.deltaXY.postValue(lastCoord);
     }
 
-    public void moveBall(float deltaY, float deltaX, float currentX, float currentY) {
-        deltaX = -deltaX * 100;
-        deltaY = deltaY * 100;
+    public void moveBall(float currentX, float currentY) {
+        float deltaY = (float) (nextDeltaY * 70);
+        float deltaX = (float) (nextDeltaX * 70);
 
-        Log.d("sensor", "received dx " + deltaX + "received dy " + deltaY);
         if (sensorDidNotMove(deltaX, deltaY)) {
             return;
         }
@@ -47,20 +48,14 @@ public class Ball {
         }
 
         if(testLocationX> screenWidth){
-            Log.d("location", "current x " + currentX + "test x" + testLocationX + "width " + this.width);
             deltaX -= (screenWidth - testLocationX);
         }
 
         if(testLocationY < 0){
-            Log.d("location", "current y " + currentY + "test y" + testLocationY + "hiht " + this.height);
-
             deltaY -= testLocationY;
         }
 
         if(testLocationY + height > screenHeight){
-            Log.d("location", "current y " + currentY + "test y" + testLocationY + "hiht " + this.height +  " max height" + screenHeight);
-            float v = screenHeight - currentY;
-            Log.d("location", "new delta y " + (screenHeight - currentY) + " old delta y" + deltaY );
             deltaY = screenHeight - currentY - height;
         }
 
@@ -98,5 +93,10 @@ public class Ball {
                 }
             }
         });
+    }
+
+    public void updateNextSensorReading(double theta, double psi) {
+        this.nextDeltaY = theta;
+        this.nextDeltaX = psi;
     }
 }

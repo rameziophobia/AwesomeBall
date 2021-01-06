@@ -1,6 +1,7 @@
 package com.example.crazyball.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.core.util.Pair;
 import androidx.lifecycle.AndroidViewModel;
@@ -11,12 +12,13 @@ import com.example.crazyball.model.Ball;
 import com.example.crazyball.model.LevelLoader;
 import com.example.crazyball.model.LevelRepository;
 import com.example.crazyball.model.obstacles.ComponentModel;
-import com.example.crazyball.model.obstacles.IFailable;
-import com.example.crazyball.model.obstacles.IWinnable;
 import com.example.crazyball.model.tables.relations.LevelWithComponents;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.Math.asin;
+import static java.lang.Math.atan2;
 
 public class MainGameViewModel extends AndroidViewModel {
 
@@ -32,16 +34,16 @@ public class MainGameViewModel extends AndroidViewModel {
         ball = new Ball();
     }
 
-    public void sensorsMoved(float deltaX, float deltaY, float currentX, float currentY) {
-        ball.moveBall(deltaX, deltaY, currentX, currentY);
+    public void updateBallLocation(float currentX, float currentY) {
+        ball.moveBall(currentX, currentY);
     }
 
     public MutableLiveData<Pair<Float, Float>> moveBall() {
         return ball.deltaXY;
     }
 
-    public LiveData<ArrayList<ComponentModel>> loadLevel(int levelId, IFailable onLevelFailed, IWinnable onLevelWon){
-        this.obstacles = levelRepository.loadLevel(levelId,  onLevelFailed, onLevelWon);
+    public LiveData<ArrayList<ComponentModel>> loadLevel(int levelId){
+        this.obstacles = levelRepository.loadLevel(levelId);
         ball.addObstacles(obstacles);
         return obstacles;
     }
@@ -62,5 +64,14 @@ public class MainGameViewModel extends AndroidViewModel {
     private LiveData<ArrayList<ComponentModel>> getLevelObstacles() {
         return obstacles;
     }
+
+    public void sensorMoved(float[] rotation_matrix) {
+//        double phi = atan2(-rotation_matrix[3], rotation_matrix[0]);
+        double theta = asin(rotation_matrix[6]);
+        double psi = atan2(-rotation_matrix[7], rotation_matrix[8]);
+        ball.updateNextSensorReading(theta, psi);
+
+    }
+
 
 }

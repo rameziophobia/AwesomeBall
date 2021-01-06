@@ -5,7 +5,6 @@ import androidx.core.util.Pair;
 import com.example.crazyball.model.tables.entities.LevelComponentEntity;
 
 public class Target extends ComponentModel {
-    private IWinnable winnableListener;
 
     protected Target(LevelComponentEntity componentData, int tileWidth, int tileHeight) {
         super(componentData, tileWidth, tileHeight);
@@ -15,8 +14,8 @@ public class Target extends ComponentModel {
     public Pair<Float, Float> doCollisionBehaviour(float deltaX, float deltaY, float currentX,
                                                    float currentY, float width, float height) {
 
-        if(collidesWith(currentX, currentY, width, height) && isCollisionAreaAboveThreshold(currentX, currentY, width, height, 0.4f)) {
-            winnableListener.onLevelWon();
+        if(collidesWith(currentX, currentY, width, height) && isCollisionAreaAboveThreshold(currentX, currentY, width, height, 0.3f)) {
+            isLevelWon.postValue(true);
             return Pair.create(0f, 0f);
         }
 
@@ -29,7 +28,4 @@ public class Target extends ComponentModel {
         return component;
     }
 
-    public void setWinnableListener(IWinnable winnableListener) {
-        this.winnableListener = winnableListener;
-    }
 }

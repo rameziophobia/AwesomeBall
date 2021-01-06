@@ -1,7 +1,5 @@
 package com.example.crazyball.view;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -15,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Insets;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -24,17 +21,13 @@ import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowInsets;
 import android.view.WindowMetrics;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.crazyball.R;
 import com.example.crazyball.model.obstacles.ComponentModel;
-import com.example.crazyball.model.obstacles.IFailable;
-import com.example.crazyball.model.obstacles.IWinnable;
 import com.example.crazyball.viewmodel.MainGameViewModel;
 
 import java.util.ArrayList;
@@ -52,9 +45,10 @@ public class FullscreenActivity extends AppCompatActivity {
     private SpringAnimation springAnimationX;
     private SpringAnimation springAnimationY;
     private int levelId;
-    private IFailable onLevelFailed;
-    private IWinnable onLevelWon;
     private Sensor rotationVectorSensor;
+    private int starsCollected = 0;
+    private long tStart = 0;
+    private long timeElapsed = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +58,6 @@ public class FullscreenActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_fullscreen);
         mContentView = findViewById(R.id.game_constraint_layout);
-
-        setOnLevelWonCallback();
-        setOnLevelFailedCallback();
 
         gameViewModel = new ViewModelProvider
                 .AndroidViewModelFactory(getApplication())
@@ -96,36 +87,43 @@ public class FullscreenActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         sensorManager.registerListener(sensorListener, rotationVectorSensor, SensorManager.SENSOR_DELAY_GAME);
+        continueTimeMeasurement();
+    }
+
+    private void continueTimeMeasurement() {
+        tStart = System.currentTimeMillis();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         stopBallMovements();
+        pauseTimeMeasurement();
     }
 
-    private void setOnLevelFailedCallback() {
-        onLevelFailed = () -> {
-            stopBallMovements();
-            sensorManager.unregisterListener(sensorListener);
-            Intent intent = new Intent(this, LevelResultActivity.class);
-            intent.putExtra("hasWon", false);
-            intent.putExtra("currentLevel", levelId);
-            intent.putExtra("score", 0);
-            startActivity(intent);
-        };
+    private void pauseTimeMeasurement() {
+        long tEnd = System.currentTimeMillis();
+        timeElapsed += (tEnd - tStart);
     }
 
-    private void setOnLevelWonCallback() {
-        onLevelWon = () -> {
-            stopBallMovements();
-            sensorManager.unregisterListener(sensorListener);
-            Intent intent = new Intent(this, LevelResultActivity.class);
-            intent.putExtra("hasWon", true);
-            intent.putExtra("currentLevel", levelId);
-            intent.putExtra("score", 1000);
-            startActivity(intent);
-        };
+    private void onLevelFailedCallback() {
+        startLevelResultsActivity(false);
+    }
+
+    private void onLevelWonCallback() {
+        startLevelResultsActivity(true);
+    }
+
+    private void startLevelResultsActivity(boolean hasWon) {
+        stopBallMovements();
+        pauseTimeMeasurement();
+        sensorManager.unregisterListener(sensorListener);
+        Intent intent = new Intent(this, LevelResultActivity.class);
+        intent.putExtra("hasWon", hasWon);
+        intent.putExtra("currentLevel", levelId);
+        intent.putExtra("timeElapsed", timeElapsed);
+        intent.putExtra("stars", starsCollected);
+        startActivity(intent);
     }
 
     private void stopBallMovements() {
@@ -142,7 +140,7 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     private void loadLevelImages() {
-        final LiveData<ArrayList<ComponentModel>> componentModelListLiveData = gameViewModel.loadLevel(levelId, onLevelFailed, onLevelWon);
+        final LiveData<ArrayList<ComponentModel>> componentModelListLiveData = gameViewModel.loadLevel(levelId);
         componentModelListLiveData.observe(this, new Observer<ArrayList<ComponentModel>>() {
             @Override
             public void onChanged(ArrayList<ComponentModel> componentModels) {
@@ -151,11 +149,36 @@ public class FullscreenActivity extends AppCompatActivity {
                     ConstraintLayout layout = findViewById(R.id.game_constraint_layout);
                     ConstraintSet set = new ConstraintSet();
                     for (ComponentModel componentModel : componentModels) {
+                        setComponentCallbacks(componentModel);
                         addComponentToLayout(layout, set, componentModel);
                     }
                 }
             }
         });
+    }
+
+    private void setComponentCallbacks(ComponentModel componentModel) {
+        componentModel.isLevelWon.observe(this, isLevelWon -> {
+            if (isLevelWon) {
+                onLevelWonCallback();
+            }
+        });
+
+        componentModel.isLevelFailed.observe(this, isLevelFailed -> {
+            if (isLevelFailed) {
+                onLevelFailedCallback();
+            }
+        });
+
+        componentModel.foundStar.observe(this, this::onFoundStar);
+    }
+
+    private void onFoundStar(Integer starId) {
+        ImageView imageView = findViewById(starId);
+        if (imageView.getVisibility() != View.GONE) {
+            starsCollected += 1;
+            imageView.setVisibility(View.GONE);
+        }
     }
 
     private void addComponentToLayout(ConstraintLayout layout, ConstraintSet set, ComponentModel componentModel) {
@@ -231,15 +254,10 @@ public class FullscreenActivity extends AppCompatActivity {
     SensorEventListener sensorListener = new SensorEventListener() {
 
         public void onSensorChanged(SensorEvent event) {
-            sensorReadingNumber++;
-            if(sensorReadingNumber % 300 == 0) {
-                Log.d("sensor","========= ACCELEROMETER SENSOR X value = "+ event.values[0] + "\n");
-                Log.d("sensor","========= ACCELEROMETER SENSOR Y value = "+ event.values[1] + "\n");
-                Log.d("sensor","========= ACCELEROMETER SENSOR Z value = "+ event.values[2] + "\n");
-                Log.d("sensor","========= _____________________________________\n");
-            }
-
-            gameViewModel.sensorsMoved(event.values[0], event.values[1], ballImageView.getX(), ballImageView.getY());
+            float[] rotation_matrix = new float[9];
+            SensorManager.getRotationMatrixFromVector(rotation_matrix, event.values);
+            gameViewModel.sensorMoved(rotation_matrix);
+            gameViewModel.updateBallLocation(ballImageView.getX(), ballImageView.getY());
         }
 
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
