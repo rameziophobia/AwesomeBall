@@ -6,8 +6,6 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 
 import com.example.crazyball.model.obstacles.ComponentModel;
-import com.example.crazyball.model.obstacles.IFailable;
-import com.example.crazyball.model.obstacles.IWinnable;
 import com.example.crazyball.model.retrofit.LevelsAPI;
 import com.example.crazyball.model.tables.LevelComponentDao;
 import com.example.crazyball.model.tables.LevelDao;
@@ -55,8 +53,8 @@ public class LevelRepository {
     }
 
 
-    public LiveData<ArrayList<ComponentModel>> loadLevel(int levelId, IFailable onLevelFailed, IWinnable onLevelWon) {
-        return LevelLoader.getInstance().loadLevel(levelDao.getLevelWithComponents(levelId),  onLevelFailed, onLevelWon);
+    public LiveData<ArrayList<ComponentModel>> loadLevel(int levelId) {
+        return LevelLoader.getInstance().loadLevel(levelDao.getLevelWithComponents(levelId));
     }
 
     public void downloadLevelsFromAPI() {

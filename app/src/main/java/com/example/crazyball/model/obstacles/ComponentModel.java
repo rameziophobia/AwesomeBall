@@ -3,6 +3,8 @@ package com.example.crazyball.model.obstacles;
 import android.widget.LinearLayout;
 
 import androidx.core.util.Pair;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.crazyball.model.tables.entities.LevelComponentEntity;
 
@@ -16,6 +18,8 @@ public abstract class ComponentModel {
     private int endY;
     private int width;
     private int height;
+    public MutableLiveData<Boolean> isLevelFailed = new MutableLiveData<>();
+    public MutableLiveData<Boolean> isLevelWon = new MutableLiveData<>();
 
     protected ComponentModel(LevelComponentEntity componentData, int tileWidth, int tileHeight) {
         this.componentData = componentData;

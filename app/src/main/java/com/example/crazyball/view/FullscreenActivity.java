@@ -29,8 +29,6 @@ import android.widget.ImageView;
 
 import com.example.crazyball.R;
 import com.example.crazyball.model.obstacles.ComponentModel;
-import com.example.crazyball.model.obstacles.IFailable;
-import com.example.crazyball.model.obstacles.IWinnable;
 import com.example.crazyball.viewmodel.MainGameViewModel;
 
 import java.util.ArrayList;
@@ -48,8 +46,6 @@ public class FullscreenActivity extends AppCompatActivity {
     private SpringAnimation springAnimationX;
     private SpringAnimation springAnimationY;
     private int levelId;
-    private IFailable onLevelFailed;
-    private IWinnable onLevelWon;
     private Sensor rotationVectorSensor;
 
     @Override
@@ -60,9 +56,6 @@ public class FullscreenActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_fullscreen);
         mContentView = findViewById(R.id.game_constraint_layout);
-
-        setOnLevelWonCallback();
-        setOnLevelFailedCallback();
 
         gameViewModel = new ViewModelProvider
                 .AndroidViewModelFactory(getApplication())
@@ -100,28 +93,24 @@ public class FullscreenActivity extends AppCompatActivity {
         stopBallMovements();
     }
 
-    private void setOnLevelFailedCallback() {
-        onLevelFailed = () -> {
-            stopBallMovements();
-            sensorManager.unregisterListener(sensorListener);
-            Intent intent = new Intent(this, LevelResultActivity.class);
-            intent.putExtra("hasWon", false);
-            intent.putExtra("currentLevel", levelId);
-            intent.putExtra("score", 0);
-            startActivity(intent);
-        };
+    private void onLevelFailedCallback() {
+        stopBallMovements();
+        sensorManager.unregisterListener(sensorListener);
+        Intent intent = new Intent(this, LevelResultActivity.class);
+        intent.putExtra("hasWon", false);
+        intent.putExtra("currentLevel", levelId);
+        intent.putExtra("score", 0);
+        startActivity(intent);
     }
 
-    private void setOnLevelWonCallback() {
-        onLevelWon = () -> {
-            stopBallMovements();
-            sensorManager.unregisterListener(sensorListener);
-            Intent intent = new Intent(this, LevelResultActivity.class);
-            intent.putExtra("hasWon", true);
-            intent.putExtra("currentLevel", levelId);
-            intent.putExtra("score", 1000);
-            startActivity(intent);
-        };
+    private void onLevelWonCallback() {
+        stopBallMovements();
+        sensorManager.unregisterListener(sensorListener);
+        Intent intent = new Intent(this, LevelResultActivity.class);
+        intent.putExtra("hasWon", true);
+        intent.putExtra("currentLevel", levelId);
+        intent.putExtra("score", 1000);
+        startActivity(intent);
     }
 
     private void stopBallMovements() {
@@ -138,7 +127,7 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     private void loadLevelImages() {
-        final LiveData<ArrayList<ComponentModel>> componentModelListLiveData = gameViewModel.loadLevel(levelId, onLevelFailed, onLevelWon);
+        final LiveData<ArrayList<ComponentModel>> componentModelListLiveData = gameViewModel.loadLevel(levelId);
         componentModelListLiveData.observe(this, new Observer<ArrayList<ComponentModel>>() {
             @Override
             public void onChanged(ArrayList<ComponentModel> componentModels) {
@@ -147,9 +136,24 @@ public class FullscreenActivity extends AppCompatActivity {
                     ConstraintLayout layout = findViewById(R.id.game_constraint_layout);
                     ConstraintSet set = new ConstraintSet();
                     for (ComponentModel componentModel : componentModels) {
+                        setComponentCallbacks(componentModel);
                         addComponentToLayout(layout, set, componentModel);
                     }
                 }
+            }
+        });
+    }
+
+    private void setComponentCallbacks(ComponentModel componentModel) {
+        componentModel.isLevelWon.observe(this, isLevelWon -> {
+            if (isLevelWon) {
+                onLevelWonCallback();
+            }
+        });
+
+        componentModel.isLevelFailed.observe(this, isLevelFailed -> {
+            if (isLevelFailed) {
+                onLevelFailedCallback();
             }
         });
     }

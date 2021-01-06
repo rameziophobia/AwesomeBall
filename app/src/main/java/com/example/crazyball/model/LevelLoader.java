@@ -6,8 +6,6 @@ import androidx.lifecycle.Observer;
 
 import com.example.crazyball.model.obstacles.ComponentFactory;
 import com.example.crazyball.model.obstacles.ComponentModel;
-import com.example.crazyball.model.obstacles.IFailable;
-import com.example.crazyball.model.obstacles.IWinnable;
 import com.example.crazyball.model.tables.entities.LevelComponentEntity;
 import com.example.crazyball.model.tables.relations.LevelWithComponents;
 
@@ -45,7 +43,7 @@ public class LevelLoader {
     }
 
 
-    public LiveData<ArrayList<ComponentModel>> loadLevel(LiveData<List<LevelWithComponents>> level, IFailable onLevelFailed, IWinnable onLevelWon) {
+    public LiveData<ArrayList<ComponentModel>> loadLevel(LiveData<List<LevelWithComponents>> level) {
         MutableLiveData<ArrayList<ComponentModel>> components = new MutableLiveData<>();
         level.observeForever(new Observer<List<LevelWithComponents>>() {
             @Override
@@ -53,7 +51,7 @@ public class LevelLoader {
                 level.removeObserver(this);
                 ArrayList<ComponentModel> obstaclesList = new ArrayList<>();
                 for (LevelComponentEntity componentEntity : levelWithComponents.get(0).components) {
-                    ComponentModel component = ComponentFactory.createComponent(componentEntity, tileWidth, tileHeight, onLevelFailed, onLevelWon);
+                    ComponentModel component = ComponentFactory.createComponent(componentEntity, tileWidth, tileHeight);
                     obstaclesList.add(component);
                 }
                 components.postValue(obstaclesList);

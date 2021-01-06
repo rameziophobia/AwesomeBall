@@ -5,7 +5,6 @@ import androidx.core.util.Pair;
 import com.example.crazyball.model.tables.entities.LevelComponentEntity;
 
 public class Trap extends ComponentModel {
-    IFailable failableListener;
     protected Trap(LevelComponentEntity componentData, int tileWidth, int tileHeight) {
         super(componentData, tileWidth, tileHeight);
     }
@@ -14,7 +13,7 @@ public class Trap extends ComponentModel {
     public Pair<Float, Float> doCollisionBehaviour(float deltaX, float deltaY, float currentX, float currentY, float width, float height) {
 
         if(collidesWith(currentX, currentY, width, height)) {
-            failableListener.onLevelFailed();
+            isLevelFailed.postValue(true);
             return Pair.create(0f, 0f);
         }
 
@@ -25,7 +24,4 @@ public class Trap extends ComponentModel {
         return new Trap(componentData, tileWidth, tileHeight);
     }
 
-    public void setFailableListener(IFailable failableListener) {
-        this.failableListener = failableListener;
-    }
 }

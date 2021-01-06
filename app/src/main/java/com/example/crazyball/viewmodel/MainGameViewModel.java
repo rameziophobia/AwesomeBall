@@ -12,8 +12,6 @@ import com.example.crazyball.model.Ball;
 import com.example.crazyball.model.LevelLoader;
 import com.example.crazyball.model.LevelRepository;
 import com.example.crazyball.model.obstacles.ComponentModel;
-import com.example.crazyball.model.obstacles.IFailable;
-import com.example.crazyball.model.obstacles.IWinnable;
 import com.example.crazyball.model.tables.relations.LevelWithComponents;
 
 import java.util.ArrayList;
@@ -44,8 +42,8 @@ public class MainGameViewModel extends AndroidViewModel {
         return ball.deltaXY;
     }
 
-    public LiveData<ArrayList<ComponentModel>> loadLevel(int levelId, IFailable onLevelFailed, IWinnable onLevelWon){
-        this.obstacles = levelRepository.loadLevel(levelId,  onLevelFailed, onLevelWon);
+    public LiveData<ArrayList<ComponentModel>> loadLevel(int levelId){
+        this.obstacles = levelRepository.loadLevel(levelId);
         ball.addObstacles(obstacles);
         return obstacles;
     }
