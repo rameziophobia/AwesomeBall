@@ -29,14 +29,11 @@ public class ScoreCalculator {
         if(starsCollected != 3){
             starScore--;
         }
-        Log.d("score", "score" + score);
-        Log.d("score", "elapsed" + elapsedTime);
+
         for (int i = 1; i <= starsCollected; i++) {
             score += 1000 * i;
         }
-        Log.d("score", "stars coll" + starsCollected);
-        Log.d("score", "score" + score);
-        Log.d("score", "---------------------------");
+
         scoreStarsPair.postValue(Pair.create(score, starScore));
     }
 

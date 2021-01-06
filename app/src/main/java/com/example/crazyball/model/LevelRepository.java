@@ -48,7 +48,6 @@ public class LevelRepository {
     }
 
     public LiveData<List<LevelWithComponents>> getAllLevels() {
-        Log.d("repo", "levels retrieved");
         return allLevels;
     }
 

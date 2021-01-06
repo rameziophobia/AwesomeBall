@@ -21,7 +21,6 @@ import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowInsets;
 import android.view.WindowMetrics;
@@ -49,7 +48,6 @@ public class FullscreenActivity extends AppCompatActivity {
     private Sensor rotationVectorSensor;
     private int starsCollected = 0;
     private long tStart = 0;
-    private long tEnd = 0;
     private long timeElapsed = 0;
 
     @Override
@@ -104,7 +102,7 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     private void pauseTimeMeasurement() {
-        tEnd = System.currentTimeMillis();
+        long tEnd = System.currentTimeMillis();
         timeElapsed += (tEnd - tStart);
     }
 
@@ -180,7 +178,6 @@ public class FullscreenActivity extends AppCompatActivity {
         if (imageView.getVisibility() != View.GONE) {
             starsCollected += 1;
             imageView.setVisibility(View.GONE);
-            Log.d("star", "woooo");
         }
     }
 
@@ -257,14 +254,6 @@ public class FullscreenActivity extends AppCompatActivity {
     SensorEventListener sensorListener = new SensorEventListener() {
 
         public void onSensorChanged(SensorEvent event) {
-            sensorReadingNumber++;
-            if(sensorReadingNumber % 100 == 0) {
-                Log.d("sensor_read","========= SENSOR X1 value = "+ event.values[0] + "\n");
-                Log.d("sensor_read","========= SENSOR Y1 value = "+ event.values[1] + "\n");
-                Log.d("sensor_read","========= SENSOR Z1 value = "+ event.values[2] + "\n");
-                Log.d("sensor_read","========= _____________________________________\n");
-            }
-
             float[] rotation_matrix = new float[9];
             SensorManager.getRotationMatrixFromVector(rotation_matrix, event.values);
             gameViewModel.sensorMoved(rotation_matrix);

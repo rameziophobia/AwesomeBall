@@ -69,12 +69,6 @@ public class MainGameViewModel extends AndroidViewModel {
 //        double phi = atan2(-rotation_matrix[3], rotation_matrix[0]);
         double theta = asin(rotation_matrix[6]);
         double psi = atan2(-rotation_matrix[7], rotation_matrix[8]);
-
-//        Log.d("sensor_read","========= SENSOR X2 value = "+ phi + "\n");
-        Log.d("sensor_read","========= SENSOR Y2 value = " + theta + "\n");
-        Log.d("sensor_read","========= SENSOR Z2 value = " + psi + "\n");
-        Log.d("sensor_read","========= _____________________________________\n");
-
         ball.updateNextSensorReading(theta, psi);
 
     }
