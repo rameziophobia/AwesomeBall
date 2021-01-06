@@ -11,6 +11,8 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.crazyball.R;
+import com.example.crazyball.model.EComponentType;
+import com.example.crazyball.model.tables.entities.ComponentEntityBuilder;
 import com.example.crazyball.model.tables.entities.LevelComponentEntity;
 import com.example.crazyball.model.tables.entities.LevelEntity;
 import com.example.crazyball.model.tables.relations.LevelWithComponents;
@@ -59,47 +61,61 @@ public abstract class LevelRoomDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(Void... voids) {
 //            levelDao.deleteAllLevels();
-            LevelEntity level = new LevelEntity("1st level");
-            level.setDifficultyLevel("Hard");
-            long insertedId = levelDao.insert(level);
-
             // todo factory method for components
             // todo use builder pattern
             // todo retrofit get data
 
-            LevelComponentEntity component = new LevelComponentEntity(
-                    "wall", 12, 0, R.drawable.ic_wall_vert, insertedId);
-            levelComponentDao.insert(component);
+            LevelEntity level = new LevelEntity("Level I");
+            level.setDifficultyLevel("Easy");
+            long insertedId = levelDao.insert(level);
 
-            component = new LevelComponentEntity(
-                    "wall", 18, 8, R.drawable.ic_wall_vert, insertedId);
-            levelComponentDao.insert(component);
-
-            component = new LevelComponentEntity(
-                    "wall", 24, 0, R.drawable.ic_wall_vert, insertedId);
-            levelComponentDao.insert(component);
-
-            for(int i = 0; i < 5; i++){
-                component = new LevelComponentEntity(
-                        "trap", 14 + 2 * i, 0, R.drawable.ic_red_2x2_trap, insertedId);
-                levelComponentDao.insert(component);
-            }
-
-            component = new LevelComponentEntity(
-                    "target", 30, 6, R.drawable.ic_yellow_2x2_check, insertedId);
-            levelComponentDao.insert(component);
-
-            level = new LevelEntity("2nd level");
-            level.setDifficultyLevel("Medium");
+            levelComponentDao.insert(new ComponentEntityBuilder(insertedId)
+                    .setType(EComponentType.target)
+                    .setLocationX(30)
+                    .setLocationY(6)
+                    .setImageId(R.drawable.ic_yellow_2x2_check)
+                    .build());
+            
+            level = new LevelEntity("Level II");
+            level.setDifficultyLevel("Easy");
             insertedId = levelDao.insert(level);
 
-            component = new LevelComponentEntity(
-                    "wall", 30, 30, R.drawable.ic_wall_hor, insertedId);
-            levelComponentDao.insert(component);
+            levelComponentDao.insert(new ComponentEntityBuilder(insertedId)
+                    .setType(EComponentType.wall)
+                    .setLocationX(12)
+                    .setLocationY(0)
+                    .setImageId(R.drawable.ic_wall_vert)
+                    .build());
 
-            component = new LevelComponentEntity(
-                    "wall", 45, 330, R.drawable.ic_wall_hor, insertedId);
-            levelComponentDao.insert(component);
+            levelComponentDao.insert(new ComponentEntityBuilder(insertedId)
+                    .setType(EComponentType.wall)
+                    .setLocationX(18)
+                    .setLocationY(0)
+                    .setImageId(R.drawable.ic_wall_vert)
+                    .build());
+
+            levelComponentDao.insert(new ComponentEntityBuilder(insertedId)
+                    .setType(EComponentType.wall)
+                    .setLocationX(24)
+                    .setLocationY(0)
+                    .setImageId(R.drawable.ic_wall_vert)
+                    .build());
+
+            for(int i = 0; i < 5; i++){
+                levelComponentDao.insert(new ComponentEntityBuilder(insertedId)
+                        .setType(EComponentType.trap)
+                        .setLocationX(14 + 2 * i)
+                        .setLocationY(0)
+                        .setImageId(R.drawable.ic_red_2x2_trap)
+                        .build());
+            }
+
+            levelComponentDao.insert(new ComponentEntityBuilder(insertedId)
+                    .setType(EComponentType.target)
+                    .setLocationX(30)
+                    .setLocationY(6)
+                    .setImageId(R.drawable.ic_yellow_2x2_check)
+                    .build());
 
             return null;
         }
