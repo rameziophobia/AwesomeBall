@@ -6,20 +6,20 @@ public class ComponentFactory {
     public static ComponentModel createComponent(LevelComponentEntity componentData, int tileWidth, int tileHeight) {
         ComponentModel ob;
         switch (componentData.getType()) {
-            case "wall":
+            case wall:
                 ob = Wall.createWall(componentData, tileWidth, tileHeight);
                 break;
-            case "trap":
+            case trap:
                 Trap trap = Trap.createTrap(componentData, tileWidth, tileHeight);
                 ob = trap;
                 break;
-            case "key":
+            case key:
                 ob = KeyTile.createKeyTile(componentData, tileWidth, tileHeight);
                 break;
-            case "door":
+            case door:
                 ob = Door.createDoor(componentData, tileWidth, tileHeight);
                 break;
-            case "target":
+            case target:
                 Target target = (Target)Target.createTarget(componentData, tileWidth, tileHeight);
                 ob = target;
                 break;

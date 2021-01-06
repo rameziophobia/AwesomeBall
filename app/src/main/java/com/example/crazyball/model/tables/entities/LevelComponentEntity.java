@@ -51,8 +51,8 @@ public class LevelComponentEntity {
 
 
     @NonNull
-    public String getType() {
-        return type;
+    public EComponentType getType() {
+        return EComponentType.valueOf(type);
     }
 
     public int getLocationX() {
