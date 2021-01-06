@@ -47,6 +47,7 @@ public class FullscreenActivity extends AppCompatActivity {
     private SpringAnimation springAnimationY;
     private int levelId;
     private Sensor rotationVectorSensor;
+    private int starsCollected = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +162,13 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     private void onFoundStar(Integer starId) {
+        ImageView imageView = findViewById(starId);
+        if (imageView.getVisibility() == View.GONE){
+            starsCollected += 1;
+        } else {
+            imageView.setVisibility(View.GONE);
+            Log.d("star", "woooo");
+        }
     }
 
     private void addComponentToLayout(ConstraintLayout layout, ConstraintSet set, ComponentModel componentModel) {

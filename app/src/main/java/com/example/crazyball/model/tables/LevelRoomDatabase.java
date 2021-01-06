@@ -69,10 +69,19 @@ public abstract class LevelRoomDatabase extends RoomDatabase {
             level.setDifficultyLevel("Easy");
             long insertedId = levelDao.insert(level);
 
+            for (int i = 0; i < 3; i++) {
+                levelComponentDao.insert(new ComponentEntityBuilder(insertedId)
+                        .setType(EComponentType.star)
+                        .setLocationX(25 - 3 * i)
+                        .setLocationY(7)
+                        .setImageId(R.drawable.ic_teal_star)
+                        .build());
+            }
+
             levelComponentDao.insert(new ComponentEntityBuilder(insertedId)
                     .setType(EComponentType.target)
                     .setLocationX(30)
-                    .setLocationY(6)
+                    .setLocationY(7)
                     .setImageId(R.drawable.ic_yellow_2x2_check)
                     .build());
 
@@ -110,6 +119,22 @@ public abstract class LevelRoomDatabase extends RoomDatabase {
                         .build());
             }
 
+            for (int i = 0; i < 2; i++) {
+                levelComponentDao.insert(new ComponentEntityBuilder(insertedId)
+                        .setType(EComponentType.star)
+                        .setLocationX(14 + 8 * i)
+                        .setLocationY(2)
+                        .setImageId(R.drawable.ic_teal_star)
+                        .build());
+            }
+
+            levelComponentDao.insert(new ComponentEntityBuilder(insertedId)
+                    .setType(EComponentType.star)
+                    .setLocationX(35)
+                    .setLocationY(1)
+                    .setImageId(R.drawable.ic_teal_star)
+                    .build());
+
             levelComponentDao.insert(new ComponentEntityBuilder(insertedId)
                     .setType(EComponentType.target)
                     .setLocationX(30)
@@ -138,6 +163,28 @@ public abstract class LevelRoomDatabase extends RoomDatabase {
                         .setImageId(R.drawable.ic_8x2_red_stripes)
                         .build());
             }
+
+            levelComponentDao.insert(new ComponentEntityBuilder(insertedId)
+                    .setType(EComponentType.star)
+                    .setLocationX(13)
+                    .setLocationY(13)
+                    .setImageId(R.drawable.ic_teal_star)
+                    .build());
+
+            levelComponentDao.insert(new ComponentEntityBuilder(insertedId)
+                    .setType(EComponentType.star)
+                    .setLocationX(1)
+                    .setLocationY(1)
+                    .setImageId(R.drawable.ic_teal_star)
+                    .build());
+
+            levelComponentDao.insert(new ComponentEntityBuilder(insertedId)
+                    .setType(EComponentType.star)
+                    .setLocationX(24)
+                    .setLocationY(0)
+                    .setImageId(R.drawable.ic_teal_star)
+                    .build());
+
 
             levelComponentDao.insert(new ComponentEntityBuilder(insertedId)
                     .setType(EComponentType.target)
