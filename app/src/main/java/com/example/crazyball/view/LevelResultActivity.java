@@ -23,6 +23,8 @@ public class LevelResultActivity extends AppCompatActivity {
     private ConstraintLayout starsConstraintLayout;
     private int numStars;
     private boolean hasWon;
+    private long timeElapsed;
+    private int starsCollected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +34,9 @@ public class LevelResultActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         this.currentLevelId = intent.getIntExtra("currentLevel", 0);
-        this.score = intent.getIntExtra("score", 0);
-        this.hasWon = intent.getBooleanExtra("hasWon", true);
+        this.hasWon = intent.getBooleanExtra("hasWon", false);
+        this.starsCollected = intent.getIntExtra("stars", 0);
+        this.timeElapsed = intent.getLongExtra("timeElapsed", 9999);
 
         ((TextView)findViewById(R.id.result_score_text_view)).setText(String.valueOf(score));
 

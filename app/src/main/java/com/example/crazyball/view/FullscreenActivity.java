@@ -48,6 +48,9 @@ public class FullscreenActivity extends AppCompatActivity {
     private int levelId;
     private Sensor rotationVectorSensor;
     private int starsCollected = 0;
+    private long tStart = 0;
+    private long tEnd = 0;
+    private long timeElapsed = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +89,23 @@ public class FullscreenActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         sensorManager.registerListener(sensorListener, rotationVectorSensor, SensorManager.SENSOR_DELAY_GAME);
+        continueTimeMeasurement();
+    }
+
+    private void continueTimeMeasurement() {
+        tStart = System.currentTimeMillis();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         stopBallMovements();
+        pauseTimeMeasurement();
+    }
+
+    private void pauseTimeMeasurement() {
+        tEnd = System.currentTimeMillis();
+        timeElapsed += (tEnd - tStart);
     }
 
     private void onLevelFailedCallback() {
@@ -100,7 +114,8 @@ public class FullscreenActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LevelResultActivity.class);
         intent.putExtra("hasWon", false);
         intent.putExtra("currentLevel", levelId);
-        intent.putExtra("score", 0);
+        intent.putExtra("timeElapsed", timeElapsed);
+        intent.putExtra("stars", starsCollected);
         startActivity(intent);
     }
 
@@ -110,7 +125,8 @@ public class FullscreenActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LevelResultActivity.class);
         intent.putExtra("hasWon", true);
         intent.putExtra("currentLevel", levelId);
-        intent.putExtra("score", 1000);
+        intent.putExtra("timeElapsed", timeElapsed);
+        intent.putExtra("stars", starsCollected);
         startActivity(intent);
     }
 
@@ -163,9 +179,8 @@ public class FullscreenActivity extends AppCompatActivity {
 
     private void onFoundStar(Integer starId) {
         ImageView imageView = findViewById(starId);
-        if (imageView.getVisibility() == View.GONE){
+        if (imageView.getVisibility() != View.GONE) {
             starsCollected += 1;
-        } else {
             imageView.setVisibility(View.GONE);
             Log.d("star", "woooo");
         }
