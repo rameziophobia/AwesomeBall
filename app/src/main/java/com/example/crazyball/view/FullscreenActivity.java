@@ -109,21 +109,19 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     private void onLevelFailedCallback() {
-        stopBallMovements();
-        sensorManager.unregisterListener(sensorListener);
-        Intent intent = new Intent(this, LevelResultActivity.class);
-        intent.putExtra("hasWon", false);
-        intent.putExtra("currentLevel", levelId);
-        intent.putExtra("timeElapsed", timeElapsed);
-        intent.putExtra("stars", starsCollected);
-        startActivity(intent);
+        startLevelResultsActivity(false);
     }
 
     private void onLevelWonCallback() {
+        startLevelResultsActivity(true);
+    }
+
+    private void startLevelResultsActivity(boolean hasWon) {
         stopBallMovements();
+        pauseTimeMeasurement();
         sensorManager.unregisterListener(sensorListener);
         Intent intent = new Intent(this, LevelResultActivity.class);
-        intent.putExtra("hasWon", true);
+        intent.putExtra("hasWon", hasWon);
         intent.putExtra("currentLevel", levelId);
         intent.putExtra("timeElapsed", timeElapsed);
         intent.putExtra("stars", starsCollected);
