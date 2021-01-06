@@ -75,7 +75,7 @@ public abstract class LevelRoomDatabase extends RoomDatabase {
                     .setLocationY(6)
                     .setImageId(R.drawable.ic_yellow_2x2_check)
                     .build());
-            
+
             level = new LevelEntity("Level II");
             level.setDifficultyLevel("Easy");
             insertedId = levelDao.insert(level);
@@ -90,7 +90,7 @@ public abstract class LevelRoomDatabase extends RoomDatabase {
             levelComponentDao.insert(new ComponentEntityBuilder(insertedId)
                     .setType(EComponentType.wall)
                     .setLocationX(18)
-                    .setLocationY(0)
+                    .setLocationY(8)
                     .setImageId(R.drawable.ic_wall_vert)
                     .build());
 
@@ -114,6 +114,35 @@ public abstract class LevelRoomDatabase extends RoomDatabase {
                     .setType(EComponentType.target)
                     .setLocationX(30)
                     .setLocationY(6)
+                    .setImageId(R.drawable.ic_yellow_2x2_check)
+                    .build());
+
+            level = new LevelEntity("Level III");
+            level.setDifficultyLevel("Easy");
+            insertedId = levelDao.insert(level);
+
+            for(int i = 0; i < 5; i++){
+                levelComponentDao.insert(new ComponentEntityBuilder(insertedId)
+                        .setType(EComponentType.trap)
+                        .setLocationX(8 + 2 * i)
+                        .setLocationY(10 - 2 * i)
+                        .setImageId(R.drawable.ic_8x2_red_stripes)
+                        .build());
+            }
+
+            for(int i = 0; i < 5; i++){
+                levelComponentDao.insert(new ComponentEntityBuilder(insertedId)
+                        .setType(EComponentType.trap)
+                        .setLocationX(21 + 2 * i)
+                        .setLocationY(2 * i)
+                        .setImageId(R.drawable.ic_8x2_red_stripes)
+                        .build());
+            }
+
+            levelComponentDao.insert(new ComponentEntityBuilder(insertedId)
+                    .setType(EComponentType.target)
+                    .setLocationX(33)
+                    .setLocationY(14)
                     .setImageId(R.drawable.ic_yellow_2x2_check)
                     .build());
 
