@@ -22,6 +22,8 @@ public class Ball {
     private float width;
     private float height;
     private ArrayList<ComponentModel> levelObstacles = new ArrayList<>();
+    private double nextDeltaX;
+    private double nextDeltaY;
 
     public Ball() {
         this.deltaXY = new MutableLiveData<>();
@@ -98,5 +100,10 @@ public class Ball {
                 }
             }
         });
+    }
+
+    public void updateNextSensorReading(double x, double y) {
+        this.nextDeltaX = x;
+        this.nextDeltaY = y;
     }
 }

@@ -1,7 +1,5 @@
 package com.example.crazyball.view;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -15,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Insets;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -29,7 +26,6 @@ import android.view.View;
 import android.view.WindowInsets;
 import android.view.WindowMetrics;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.crazyball.R;
 import com.example.crazyball.model.obstacles.ComponentModel;
@@ -232,14 +228,17 @@ public class FullscreenActivity extends AppCompatActivity {
 
         public void onSensorChanged(SensorEvent event) {
             sensorReadingNumber++;
-            if(sensorReadingNumber % 300 == 0) {
-                Log.d("sensor","========= ACCELEROMETER SENSOR X value = "+ event.values[0] + "\n");
-                Log.d("sensor","========= ACCELEROMETER SENSOR Y value = "+ event.values[1] + "\n");
-                Log.d("sensor","========= ACCELEROMETER SENSOR Z value = "+ event.values[2] + "\n");
-                Log.d("sensor","========= _____________________________________\n");
+            if(sensorReadingNumber % 100 == 0) {
+                Log.d("sensor_read","========= SENSOR X1 value = "+ event.values[0] + "\n");
+                Log.d("sensor_read","========= SENSOR Y1 value = "+ event.values[1] + "\n");
+                Log.d("sensor_read","========= SENSOR Z1 value = "+ event.values[2] + "\n");
+                Log.d("sensor_read","========= _____________________________________\n");
             }
 
-            gameViewModel.sensorsMoved(event.values[0], event.values[1], ballImageView.getX(), ballImageView.getY());
+            float[] rotation_matrix = new float[9];
+            SensorManager.getRotationMatrixFromVector(rotation_matrix, event.values);
+            gameViewModel.sensorsMoved(rotation_matrix);
+            gameViewModel.sensorsMoved(ballImageView.getX(), ballImageView.getY());
         }
 
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
