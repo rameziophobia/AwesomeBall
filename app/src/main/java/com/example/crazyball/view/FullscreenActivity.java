@@ -156,6 +156,11 @@ public class FullscreenActivity extends AppCompatActivity {
                 onLevelFailedCallback();
             }
         });
+
+        componentModel.foundStar.observe(this, this::onFoundStar);
+    }
+
+    private void onFoundStar(Integer starId) {
     }
 
     private void addComponentToLayout(ConstraintLayout layout, ConstraintSet set, ComponentModel componentModel) {

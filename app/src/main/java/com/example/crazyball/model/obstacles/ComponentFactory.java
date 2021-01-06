@@ -22,6 +22,9 @@ public class ComponentFactory {
             case target:
                 ob = (Target)Target.createTarget(componentData, tileWidth, tileHeight);
                 break;
+            case star:
+                ob = Star.createStar(componentData, tileWidth, tileHeight);
+                break;
             default:
                 throw new IllegalStateException("Unexpected value in obstacle creation: " + componentData.getType());
         }

@@ -20,6 +20,7 @@ public abstract class ComponentModel {
     private int height;
     public MutableLiveData<Boolean> isLevelFailed = new MutableLiveData<>();
     public MutableLiveData<Boolean> isLevelWon = new MutableLiveData<>();
+    public MutableLiveData<Integer> foundStar = new MutableLiveData<>();
 
     protected ComponentModel(LevelComponentEntity componentData, int tileWidth, int tileHeight) {
         this.componentData = componentData;

@@ -6,6 +6,7 @@ public enum EComponentType {
     key("key"),
     door("door"),
     target("target"),
+    star("star"),
     ;
 
     private final String typeString;
