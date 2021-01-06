@@ -5,15 +5,16 @@
     android:viewportHeight="40">
   <path
       android:pathData="M0,0L40,0L40,40L0,40L0,0Z"
-      android:fillColor="#1F0C2C"/>
+      android:fillColor="@color/purple_800"/>
   <group>
     <clip-path
+
         android:pathData="M0,0L40,0L40,40L0,40L0,0Z"/>
     <path
         android:fillColor="#FF000000"
         android:pathData="M0,0L40,0L40,40L0,40L0,0Z"
         android:strokeWidth="2"
         android:fillAlpha="0"
-        android:strokeColor="#995fff"/>
+        android:strokeColor="@color/purple_300"/>
   </group>
 </vector>
