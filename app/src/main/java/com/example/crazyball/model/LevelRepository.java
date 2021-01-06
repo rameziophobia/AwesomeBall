@@ -57,6 +57,10 @@ public class LevelRepository {
         return LevelLoader.getInstance().loadLevel(levelDao.getLevelWithComponents(levelId));
     }
 
+    public LiveData<List<LevelWithComponents>> getLevelEntity(int levelId) {
+        return levelDao.getLevelWithComponents(levelId);
+    }
+
     public void downloadLevelsFromAPI() {
         Call<List<LevelEntity>> call = levelsAPI.getLevels();
         call.enqueue(new Callback<List<LevelEntity>>() {
