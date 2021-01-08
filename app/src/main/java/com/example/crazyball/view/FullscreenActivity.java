@@ -86,7 +86,7 @@ public class FullscreenActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        sensorManager.registerListener(sensorListener, rotationVectorSensor, SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(sensorListener, rotationVectorSensor, SensorManager.SENSOR_DELAY_FASTEST);
         continueTimeMeasurement();
     }
 
@@ -204,11 +204,11 @@ public class FullscreenActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        hideSystemUI();
-    }
+//    @Override
+//    protected void onPostResume() {
+//        super.onPostResume();
+//        hideSystemUI();
+//    }
 
 
     private void hideSystemUI() {
