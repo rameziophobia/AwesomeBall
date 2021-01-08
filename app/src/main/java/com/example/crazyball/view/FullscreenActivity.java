@@ -265,6 +265,14 @@ public class FullscreenActivity extends AppCompatActivity {
         }
     };
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(hasFocus) {
+            hideSystemUI();
+        }
+    }
+
     private void animateBall(Pair<Float, Float> XYPair) {
         springAnimationX
                 .animateToFinalPosition(ballImageView.getTranslationX() - XYPair.first);

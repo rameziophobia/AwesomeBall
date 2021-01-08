@@ -40,7 +40,10 @@ public class LevelSelector extends AppCompatActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
+        hideSystemUI();
+    }
 
+    private void hideSystemUI() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
@@ -52,7 +55,13 @@ public class LevelSelector extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
 
-
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(hasFocus) {
+            hideSystemUI();
+        }
     }
 }

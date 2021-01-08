@@ -24,15 +24,18 @@ public class PauseLevelActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
+    protected void onPostResume() {
+        super.onPostResume();
+        hideSystemUI();
+    }
 
+    private void hideSystemUI() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
         }
 
-        findViewById(R.id.pause_level_layout).setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+        findViewById(R.id.levels_recycler_view).setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -56,5 +59,13 @@ public class PauseLevelActivity extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         view.getContext().startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(hasFocus) {
+            hideSystemUI();
+        }
     }
 }

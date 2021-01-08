@@ -137,7 +137,10 @@ public class LevelResultActivity extends AppCompatActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
+        hideSystemUI();
+    }
 
+    private void hideSystemUI() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
@@ -149,9 +152,7 @@ public class LevelResultActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-
     }
-
 
 
     @Override
@@ -178,5 +179,13 @@ public class LevelResultActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LevelSelector.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(hasFocus) {
+            hideSystemUI();
+        }
     }
 }
