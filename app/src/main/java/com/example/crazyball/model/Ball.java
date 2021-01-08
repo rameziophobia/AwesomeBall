@@ -62,7 +62,7 @@ public class Ball {
         lastCoord = Pair.create(deltaX, deltaY);
         for(ComponentModel componentModel: levelObstacles) {
             if(componentModel.collidesWith(testLocationX, testLocationY, width, height)){
-                lastCoord = componentModel.doCollisionBehaviour(deltaX, deltaY, currentX, currentY, width, height);
+                lastCoord = componentModel.doCollisionBehaviour(lastCoord.first, lastCoord.second, currentX, currentY, width, height);
             }
         }
 
