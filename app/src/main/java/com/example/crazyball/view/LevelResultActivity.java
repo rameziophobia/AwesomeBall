@@ -61,6 +61,12 @@ public class LevelResultActivity extends AppCompatActivity {
         } else {
             starsConstraintLayout.post(this::changeTitleToLoss);
         }
+
+        scoreViewModel.checkIfLevelExists(currentLevelId + 1).observe(this, levels -> {
+            if (levels.isEmpty()) {
+                findViewById(R.id.btn_next).setEnabled(false);
+            }
+        });
     }
 
     private void startScoreAnimation() {

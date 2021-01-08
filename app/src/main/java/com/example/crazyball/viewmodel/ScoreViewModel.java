@@ -4,10 +4,14 @@ import android.app.Application;
 
 import androidx.core.util.Pair;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.crazyball.model.LevelRepository;
 import com.example.crazyball.model.ScoreCalculator;
+import com.example.crazyball.model.tables.relations.LevelWithComponents;
+
+import java.util.List;
 
 public class ScoreViewModel extends AndroidViewModel {
 
@@ -22,6 +26,10 @@ public class ScoreViewModel extends AndroidViewModel {
 
     public void loadLevel(int levelId){
         levelRepository.getLevelEntity(levelId).observeForever(scoreCalculator::setLevelEntity);
+    }
+
+    public LiveData<List<LevelWithComponents>> checkIfLevelExists(int levelId){
+        return levelRepository.getLevelEntity(levelId);
     }
 
     public void sendScoreData(long elapsedTime, int starsCollected) {
