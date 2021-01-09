@@ -42,12 +42,12 @@ public class LevelResultActivity extends AppCompatActivity {
         this.starsCollected = intent.getIntExtra("stars", 0);
         this.timeElapsed = intent.getLongExtra("timeElapsed", 9999);
 
+        scoreViewModel = new ViewModelProvider
+                .AndroidViewModelFactory(getApplication())
+                .create(ScoreViewModel.class);
+
 
         if (hasWon) {
-            scoreViewModel = new ViewModelProvider
-                    .AndroidViewModelFactory(getApplication())
-                    .create(ScoreViewModel.class);
-
             scoreViewModel.loadLevel(currentLevelId);
             scoreViewModel.sendScoreData(timeElapsed, starsCollected);
             scoreViewModel.getScore().observe(this, scorePair -> starsConstraintLayout.post(() -> {
